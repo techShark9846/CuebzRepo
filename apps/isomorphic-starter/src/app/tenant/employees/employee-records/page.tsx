@@ -1,0 +1,24 @@
+import Link from "next/link";
+import { PiPlusBold } from "react-icons/pi";
+import { Button } from "rizzui";
+import PageHeader from "@/app/shared/page-header";
+import EmployeesTable from "@/app/shared/employees/employees-list/table";
+import { routesTenant } from "../../../../config/routes";
+
+export default function EmployeesPage() {
+  return (
+    <>
+      <PageHeader title="Employees" breadcrumb={[]}>
+        <div className="mt-4 flex items-center gap-3">
+          <Link href={routesTenant.employees.createEmployeeRecord}>
+            <Button>
+              <PiPlusBold className="me-1.5 size-[17px]" />
+              Add Employee
+            </Button>
+          </Link>
+        </div>
+      </PageHeader>
+      <EmployeesTable pageSize={20} />
+    </>
+  );
+}
