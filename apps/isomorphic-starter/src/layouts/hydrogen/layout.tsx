@@ -16,7 +16,7 @@ export default function HydrogenLayout({
         <Header />
         <Sidebar className="fixed hidden xl:block dark:bg-gray-50" />
         <div className="flex w-full flex-col xl:ms-[270px] xl:w-[calc(100%-270px)] 2xl:ms-72 2xl:w-[calc(100%-288px)]">
-          <div className="flex flex-grow flex-col pr-4 pb-6 pt-2 md:pr-3 lg:pr-4 lg:pb-8 3xl:pr-8 3xl:pt-4 4xl:pr-10 4xl:pb-9">
+          <div className="flex flex-grow flex-col pr-4 pb-6 md:pr-3 lg:pr-4 lg:pb-8 3xl:pr-8 4xl:pr-10 4xl:pb-9 pl-4">
             {children}
           </div>
         </div>

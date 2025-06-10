@@ -64,7 +64,7 @@ export default function TaskStatusChart({
               className="flex items-center gap-2 border border-gray-200 dark:border-gray-700 rounded-md px-3 py-2 bg-gray-50 dark:bg-gray-900"
             >
               <span
-                className="inline-block w-3 h-3 rounded-full"
+                className="inline-block w-3 h-3 rounded-sm"
                 style={{ backgroundColor: COLORS[index % COLORS.length] }}
               ></span>
               <div>

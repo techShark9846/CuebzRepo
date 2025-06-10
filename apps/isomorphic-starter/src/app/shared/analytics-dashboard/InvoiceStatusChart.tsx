@@ -242,7 +242,7 @@ export default function InvoiceStatusChart({
         {rawData.map((item) => (
           <div key={item.name} className="flex items-center gap-2">
             <span
-              className="inline-block w-3 h-3 rounded-full"
+              className="inline-block w-3 h-3 rounded-sm"
               style={{ backgroundColor: COLOR_MAP[item.name] || "#95a5a6" }}
             />
             <Text className="text-xs font-medium text-gray-700">

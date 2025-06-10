@@ -288,7 +288,7 @@ export default function LeadConversionChart({
           <div key={item.name} className="flex flex-col items-center">
             <div className="flex items-center gap-2">
               <div
-                className="w-3 h-3 rounded-full"
+                className="w-3 h-3 rounded-sm"
                 style={{
                   backgroundColor: COLORS[item.name as keyof typeof COLORS],
                 }}

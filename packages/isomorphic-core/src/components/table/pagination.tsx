@@ -122,14 +122,73 @@
 //   );
 // }
 
-import { Table as ReactTableType } from "@tanstack/react-table";
-import { ActionIcon, Flex, Grid, Select, SelectOption, Text } from "rizzui";
-import {
-  PiCaretLeftBold,
-  PiCaretRightBold,
-  PiCaretDoubleLeftBold,
-  PiCaretDoubleRightBold,
-} from "react-icons/pi";
+// <Flex gap="6" align="center" justify="between">
+//   {/* Rows Per Page */}
+//   <Flex align="center">
+//     <Text>Rows per page:</Text>
+//     <Select
+//       size="sm"
+//       variant="flat"
+//       options={rowsPerPageOptions}
+//       className="w-12 ml-2"
+//       value={pageSize}
+//       onChange={(option: SelectOption) =>
+//         onPageSizeChange(Number(option.value))
+//       }
+//     />
+//   </Flex>
+
+//   {/* Pagination Controls */}
+//   <Flex align="center">
+//     <Text>
+//       Page {pageIndex + 1} of {totalPages}
+//     </Text>
+//     <Grid gap="2" columns="4" className="ml-4">
+//       <ActionIcon
+//         size="sm"
+//         rounded="lg"
+//         variant="outline"
+//         aria-label="Go to first page"
+//         onClick={() => onPageChange(0)}
+//         disabled={pageIndex === 0}
+//       >
+//         <PiCaretDoubleLeftBold />
+//       </ActionIcon>
+//       <ActionIcon
+//         size="sm"
+//         rounded="lg"
+//         variant="outline"
+//         aria-label="Go to previous page"
+//         onClick={() => onPageChange(pageIndex - 1)}
+//         disabled={pageIndex === 0}
+//       >
+//         <PiCaretLeftBold />
+//       </ActionIcon>
+//       <ActionIcon
+//         size="sm"
+//         rounded="lg"
+//         variant="outline"
+//         aria-label="Go to next page"
+//         onClick={() => onPageChange(pageIndex + 1)}
+//         disabled={pageIndex + 1 >= totalPages}
+//       >
+//         <PiCaretRightBold />
+//       </ActionIcon>
+//       <ActionIcon
+//         size="sm"
+//         rounded="lg"
+//         variant="outline"
+//         aria-label="Go to last page"
+//         onClick={() => onPageChange(totalPages - 1)}
+//         disabled={pageIndex + 1 >= totalPages}
+//       >
+//         <PiCaretDoubleRightBold />
+//       </ActionIcon>
+//     </Grid>
+//   </Flex>
+// </Flex>
+import { ActionIcon, Flex, Input, Select, SelectOption, Text } from "rizzui";
+import { PiCaretLeftBold, PiCaretRightBold } from "react-icons/pi";
 
 const rowsPerPageOptions = [5, 10, 15, 20, 25].map((value) => ({
   value,
@@ -154,145 +213,50 @@ export default function TablePagination<TData>({
   const totalPages = Math.ceil(totalCount / pageSize);
 
   return (
-    // <Flex gap="6" align="center" justify="between">
-    //   {/* Rows Per Page */}
-    //   <Flex align="center">
-    //     <Text>Rows per page:</Text>
-    //     <Select
-    //       size="sm"
-    //       variant="flat"
-    //       options={rowsPerPageOptions}
-    //       className="w-12 ml-2"
-    //       value={pageSize}
-    //       onChange={(option: SelectOption) =>
-    //         onPageSizeChange(Number(option.value))
-    //       }
-    //     />
-    //   </Flex>
-
-    //   {/* Pagination Controls */}
-    //   <Flex align="center">
-    //     <Text>
-    //       Page {pageIndex + 1} of {totalPages}
-    //     </Text>
-    //     <Grid gap="2" columns="4" className="ml-4">
-    //       <ActionIcon
-    //         size="sm"
-    //         rounded="lg"
-    //         variant="outline"
-    //         aria-label="Go to first page"
-    //         onClick={() => onPageChange(0)}
-    //         disabled={pageIndex === 0}
-    //       >
-    //         <PiCaretDoubleLeftBold />
-    //       </ActionIcon>
-    //       <ActionIcon
-    //         size="sm"
-    //         rounded="lg"
-    //         variant="outline"
-    //         aria-label="Go to previous page"
-    //         onClick={() => onPageChange(pageIndex - 1)}
-    //         disabled={pageIndex === 0}
-    //       >
-    //         <PiCaretLeftBold />
-    //       </ActionIcon>
-    //       <ActionIcon
-    //         size="sm"
-    //         rounded="lg"
-    //         variant="outline"
-    //         aria-label="Go to next page"
-    //         onClick={() => onPageChange(pageIndex + 1)}
-    //         disabled={pageIndex + 1 >= totalPages}
-    //       >
-    //         <PiCaretRightBold />
-    //       </ActionIcon>
-    //       <ActionIcon
-    //         size="sm"
-    //         rounded="lg"
-    //         variant="outline"
-    //         aria-label="Go to last page"
-    //         onClick={() => onPageChange(totalPages - 1)}
-    //         disabled={pageIndex + 1 >= totalPages}
-    //       >
-    //         <PiCaretDoubleRightBold />
-    //       </ActionIcon>
-    //     </Grid>
-    //   </Flex>
-    // </Flex>
-
-    <Flex
-      gap="8"
-      align="center"
-      justify="between"
-      className="py-4 px-6 bg-gray-50 border-t border-gray-200 rounded-b-lg"
-    >
-      {/* Rows Per Page */}
-      <Flex align="center" className="gap-4">
-        <Text className="font-medium text-gray-700">Rows per page:</Text>
+    <Flex justify="between" align="center" className="px-4 py-3 text-sm">
+      {/* Left: Rows per page */}
+      <Flex align="center" className="gap-2 text-gray-700">
+        <Text className="text-sm">Rows per page</Text>
         <Select
-          size="sm"
-          variant="flat"
           options={rowsPerPageOptions}
-          className="w-16"
           value={pageSize}
+          size="sm"
+          className="w-[70px]"
           onChange={(option: SelectOption) =>
             onPageSizeChange(Number(option.value))
           }
         />
       </Flex>
 
-      {/* Pagination Controls */}
-      <Flex align="center" className="gap-6">
-        <Text className="font-medium text-gray-700">
-          Page <span className="font-semibold">{pageIndex + 1}</span> of{" "}
-          <span className="font-semibold">{totalPages}</span>
-        </Text>
-        <Grid gap="2" columns="4">
-          <ActionIcon
-            size="sm"
-            rounded="lg"
-            variant="outline"
-            aria-label="Go to first page"
-            onClick={() => onPageChange(0)}
-            disabled={pageIndex === 0}
-            className="disabled:text-gray-400"
-          >
-            <PiCaretDoubleLeftBold />
-          </ActionIcon>
-          <ActionIcon
-            size="sm"
-            rounded="lg"
-            variant="outline"
-            aria-label="Go to previous page"
-            onClick={() => onPageChange(pageIndex - 1)}
-            disabled={pageIndex === 0}
-            className="disabled:text-gray-400"
-          >
-            <PiCaretLeftBold />
-          </ActionIcon>
-          <ActionIcon
-            size="sm"
-            rounded="lg"
-            variant="outline"
-            aria-label="Go to next page"
-            onClick={() => onPageChange(pageIndex + 1)}
-            disabled={pageIndex + 1 >= totalPages}
-            className="disabled:text-gray-400"
-          >
-            <PiCaretRightBold />
-          </ActionIcon>
-          <ActionIcon
-            size="sm"
-            rounded="lg"
-            variant="outline"
-            aria-label="Go to last page"
-            onClick={() => onPageChange(totalPages - 1)}
-            disabled={pageIndex + 1 >= totalPages}
-            className="disabled:text-gray-400"
-          >
-            <PiCaretDoubleRightBold />
-          </ActionIcon>
-        </Grid>
+      {/* Right: Pagination */}
+      <Flex align="center" className="gap-2 text-gray-700">
+        <ActionIcon
+          size="sm"
+          variant="outline"
+          aria-label="Previous Page"
+          onClick={() => onPageChange(Math.max(0, pageIndex - 1))}
+          disabled={pageIndex === 0}
+        >
+          <PiCaretLeftBold size={16} />
+        </ActionIcon>
+
+        <div className="border rounded px-2 py-[2px] min-w-[36px] text-center">
+          {pageIndex + 1}
+        </div>
+
+        <ActionIcon
+          size="sm"
+          variant="outline"
+          aria-label="Next Page"
+          onClick={() =>
+            onPageChange(pageIndex + 1 < totalPages ? pageIndex + 1 : pageIndex)
+          }
+          disabled={pageIndex + 1 >= totalPages}
+        >
+          <PiCaretRightBold size={16} />
+        </ActionIcon>
+
+        <Text className="text-sm text-gray-500">of {totalPages}</Text>
       </Flex>
     </Flex>
   );

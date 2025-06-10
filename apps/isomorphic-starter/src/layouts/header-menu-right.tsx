@@ -81,7 +81,46 @@ export default function HeaderMenuRight() {
   };
 
   return (
+    // <div className="ms-auto flex items-center gap-6 pr-4">
+    //   <RenewModal
+    //     isOpen={isRenewModalOpen}
+    //     onClose={() => setRenewModalOpen(false)}
+    //   />
+
+    //   {/* Notification Button */}
+    //   <NotificationDropdown>
+    //     <div className="relative">
+    //       <ActionIcon
+    //         aria-label="Notification"
+    //         variant="text"
+    //         className="text-tertiary hover:text-tertiary/80 p-0"
+    //       >
+    //         <PiBellRingingBold className="w-6 h-6" />
+    //       </ActionIcon>
+    //       <span className="absolute top-0.5 right-0.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-gray-900" />
+    //     </div>
+    //   </NotificationDropdown>
+
+    //   {/* Settings */}
+    //   <FcSettings className="w-6 h-6 cursor-pointer text-white" />
+
+    //   {/* Profile Menu */}
+    //   <ProfileMenu />
+    // </div>
     <div className="ms-auto flex items-center gap-6 pr-4">
+      {/* Plan Expiry Status */}
+      {/* {subscriptionStatus === "active" && daysRemaining !== null && ( */}
+      <div className="bg-white rounded-full px-4 py-1 text-sm font-medium flex items-center shadow-sm border">
+        <span className="inline-block bg-green-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full mr-2">
+          Active
+        </span>
+        <span className="text-[#657079]">
+          Your plan will expire in {daysRemaining}{" "}
+          {daysRemaining === 1 ? "day" : "days"}
+        </span>
+      </div>
+      {/* )} */}
+
       <RenewModal
         isOpen={isRenewModalOpen}
         onClose={() => setRenewModalOpen(false)}

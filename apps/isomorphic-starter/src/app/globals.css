@@ -168,6 +168,11 @@
     z-index: 9999 !important;
   }
 
+  .rizzui-drawer-root {
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+
   /* base style */
   html {
     @apply h-full antialiased;

@@ -13,10 +13,11 @@ import { debounce } from "lodash";
 import DeletePopover from "@core/components/delete-popover";
 import { CustomerType } from "@/types/customerTypes";
 import { useModal } from "../../modal-views/use-modal";
-import CustomerDetailsModal from "./CustomerDetailsModal";
 import { FiEye, FiEdit, FiTrash } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import CustomerEditDrawer from "../create-edit/CustomerEditForm";
+import CustomerDetailsDrawer from "./CustomerDetailsDrawer";
 
 export default function CustomersTable({
   pageSize = 20,
@@ -36,6 +37,10 @@ export default function CustomersTable({
     assignedTo: "",
     dateOfBirth: "",
   });
+
+  const [selectedCustomer, setSelectedCustomer] = useState({});
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerEditOpen, setDrawerEditOpen] = useState(false);
 
   const { openModal, closeModal } = useModal();
   const router = useRouter();
@@ -94,12 +99,15 @@ export default function CustomersTable({
         accessorKey: "full_name",
         header: "Full Name",
         cell: ({ row }: any) => (
-          <Link
-            href={`/tenant/customers-vendors/customer/${row.original._id}`}
+          <button
+            onClick={() => {
+              setSelectedCustomer(row.original);
+              setDrawerOpen(true);
+            }}
             className="text-blue-900 underline"
           >
             {row.original.full_name}
-          </Link>
+          </button>
         ),
       },
       { accessorKey: "email", header: "Email" },
@@ -130,83 +138,6 @@ export default function CustomersTable({
         header: "Assigned To",
         cell: ({ row }: any) => row.original.assigned_to?.full_name || "N/A",
       },
-      {
-        accessorKey: "action",
-        header: "Actions",
-        cell: ({ row }) => (
-          <Flex align="center" justify="end" className="pe-4">
-            {/* View Details Action */}
-            <Tooltip
-              size="sm"
-              content="View Details"
-              placement="top"
-              color="invert"
-            >
-              <ActionIcon
-                as="span"
-                size="sm"
-                variant="outline"
-                aria-label="View Details"
-                onClick={() => {
-                  openModal({
-                    view: (
-                      <CustomerDetailsModal
-                        customer={row.original}
-                        closeModal={closeModal}
-                      />
-                    ),
-                    size: "lg",
-                  });
-                }}
-              >
-                <FiEye />
-              </ActionIcon>
-            </Tooltip>
-
-            {/* Edit Customer Action */}
-            <Tooltip
-              size="sm"
-              content="Edit Customer"
-              placement="top"
-              color="invert"
-            >
-              <ActionIcon
-                as="span"
-                size="sm"
-                variant="outline"
-                aria-label="Edit Customer"
-                onClick={() => {
-                  router.push(
-                    `/tenant/customers-vendors/customer/${row.original._id}/edit`
-                  );
-                }}
-              >
-                <FiEdit />
-              </ActionIcon>
-            </Tooltip>
-
-            {/* Delete Customer Action */}
-            <DeletePopover
-              title={`Delete Customer`}
-              description={`Are you sure you want to delete ${row.original.full_name}?`}
-              onDelete={async () => {
-                try {
-                  toast.loading("Deleting customer...");
-                  await customerService.delete(row.original._id);
-                  toast.dismiss();
-                  toast.success(
-                    `Customer ${row.original.full_name} deleted successfully.`
-                  );
-                  await fetchCustomers();
-                } catch (error) {
-                  toast.dismiss();
-                  toast.error("Failed to delete customer. Please try again.");
-                }
-              }}
-            />
-          </Flex>
-        ),
-      },
     ],
   });
 
@@ -220,6 +151,18 @@ export default function CustomersTable({
 
   return (
     <div>
+      <CustomerDetailsDrawer
+        customer={selectedCustomer}
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        setEditOpen={setDrawerEditOpen}
+      />
+      <CustomerEditDrawer
+        customer={selectedCustomer}
+        open={drawerEditOpen}
+        onClose={() => setDrawerEditOpen(false)}
+        onUpdated={fetchCustomers}
+      />
       {!hideFilters && (
         <Filters
           filters={filters}

@@ -97,7 +97,7 @@ export default function Sidebar({ className }: { className?: string }) {
   return (
     <aside
       className={cn(
-        "fixed bottom-0 start-0 z-50 h-full w-[270px] bg-white shadow-lg transition-all duration-200",
+        "bottom-0 start-0 z-50 h-full w-[270px] bg-white shadow-2xl transition-all duration-200 fixed hidden xl:block dark:bg-gray-50",
         isCollapsed && "w-[70px]",
         className
       )}

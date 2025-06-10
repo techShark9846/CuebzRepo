@@ -8,16 +8,7 @@ import { routesTenant } from "@/config/routes";
 export default function CustomersPage() {
   return (
     <>
-      <PageHeader title="Customers" breadcrumb={[]}>
-        <div className="mt-4 flex items-center gap-3">
-          <Link href={routesTenant.sales.createCustomer}>
-            <Button>
-              <PiPlusBold className="me-1.5 size-[17px]" />
-              Add Customer
-            </Button>
-          </Link>
-        </div>
-      </PageHeader>
+      <PageHeader title="Customers" breadcrumb={[]}></PageHeader>
       <CustomersTable pageSize={20} />
     </>
   );
