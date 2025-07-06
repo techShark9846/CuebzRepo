@@ -158,6 +158,7 @@ export default function TaskForm({ filePreviews, setFilePreviews }: any) {
               { value: "High", label: "High" },
               { value: "Medium", label: "Medium" },
               { value: "Low", label: "Low" },
+              { value: "Urgent", label: "Urgent" },
             ]}
             value={
               watch("priority")

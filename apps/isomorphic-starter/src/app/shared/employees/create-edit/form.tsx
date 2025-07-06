@@ -26,7 +26,7 @@ export default function Form({ filePreviews, setFilePreviews }: any) {
         const response = await employeeService.getList();
         const options = response.data.map((employee: any) => ({
           value: employee._id,
-          label: employee.full_name,
+          label: `${employee.full_name}${employee.job_title ? ` (${employee.job_title})` : ""}`,
         }));
         setEmployeeOptions(options);
       } catch (error) {
@@ -164,8 +164,8 @@ export default function Form({ filePreviews, setFilePreviews }: any) {
           />
 
           <Input
-            label="UAE Contact Number"
-            placeholder="Enter UAE contact number"
+            label="Contact Number"
+            placeholder="e.g. 05XXXXXXXX"
             {...register("uae_contact_number")}
             error={errors.uae_contact_number?.message?.toString()}
           />
@@ -222,10 +222,23 @@ export default function Form({ filePreviews, setFilePreviews }: any) {
             )}
           </div>
 
-          <Input
+          <Select
             label="Blood Group"
-            placeholder="Enter blood group"
-            {...register("blood_group")}
+            placeholder="Select blood group"
+            options={[
+              { value: "A+", label: "A+" },
+              { value: "A-", label: "A-" },
+              { value: "B+", label: "B+" },
+              { value: "B-", label: "B-" },
+              { value: "AB+", label: "AB+" },
+              { value: "AB-", label: "AB-" },
+              { value: "O+", label: "O+" },
+              { value: "O-", label: "O-" },
+            ]}
+            value={watch("blood_group") || ""}
+            onChange={(option: any) =>
+              setValue("blood_group", option?.value || "")
+            }
             error={errors.blood_group?.message?.toString()}
           />
         </div>
@@ -347,9 +360,42 @@ export default function Form({ filePreviews, setFilePreviews }: any) {
       <hr className="my-8 border-gray-300" />
 
       {/* Section: Job Details */}
+      {/* Section: Job Details */}
       <div>
         <h3 className="text-lg font-semibold mb-4">Job Details</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Input
+            label="Employee Code"
+            placeholder="Enter employee ID/code"
+            {...register("employee_code")}
+            error={errors.employee_code?.message?.toString()}
+          />
+
+          <Select
+            label="Employee Type"
+            placeholder="Select employee type"
+            options={[
+              { value: "Permanent", label: "Permanent" },
+              { value: "Contract", label: "Contract" },
+              { value: "Part-Time", label: "Part-Time" },
+              { value: "Intern", label: "Intern" },
+              { value: "Other", label: "Other" },
+            ]}
+            value={watch("employee_type")}
+            onChange={(option: any) =>
+              setValue("employee_type", option?.value || "")
+            }
+            error={errors.employee_type?.message?.toString()}
+          />
+
+          <Input
+            label="Total Years in Company"
+            placeholder="Enter total years (e.g., 3)"
+            type="number"
+            {...register("total_years_in_company", { valueAsNumber: true })}
+            error={errors.total_years_in_company?.message?.toString()}
+          />
+
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Date of Joining
@@ -365,7 +411,7 @@ export default function Form({ filePreviews, setFilePreviews }: any) {
               }}
               placeholderText="Select date of joining"
               dateFormat="dd-MMM-yyyy"
-              className="w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className="w-full mt-1"
             />
             {errors.date_of_joining && (
               <p className="mt-1 text-sm text-red-600">
@@ -456,6 +502,23 @@ export default function Form({ filePreviews, setFilePreviews }: any) {
             {...register("bank_details.iban")}
             error={(errors.bank_details as any)?.iban?.message?.toString()}
           />
+
+          <Select
+            label="Salary Transfer Mode"
+            placeholder="Select salary transfer mode"
+            options={[
+              { value: "Bank Transfer", label: "Bank Transfer" },
+              { value: "Cash", label: "Cash" },
+              { value: "Cheque", label: "Cheque" },
+            ]}
+            value={watch("bank_details.salary_transfer_mode") || ""}
+            onChange={(option: any) =>
+              setValue("bank_details.salary_transfer_mode", option?.value || "")
+            }
+            error={(
+              errors.bank_details as any
+            )?.salary_transfer_mode?.message?.toString()}
+          />
         </div>
       </div>
 
@@ -497,6 +560,84 @@ export default function Form({ filePreviews, setFilePreviews }: any) {
       </div>
 
       <hr className="my-8 border-gray-300" />
+
+      {/* Section: Leave Details */}
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Leave Details</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Casual Leave */}
+          <Input
+            label="Casual Leave Allowed"
+            placeholder="Enter allowed casual leave"
+            type="number"
+            {...register("leaves.casual.allowed", { valueAsNumber: true })}
+            error={(
+              errors?.leaves as any
+            )?.casual?.allowed?.message?.toString()}
+          />
+
+          <Input
+            label="Casual Leave Taken"
+            placeholder="Enter taken casual leave"
+            type="number"
+            {...register("leaves.casual.taken", { valueAsNumber: true })}
+            error={(errors?.leaves as any)?.casual?.taken?.message?.toString()}
+          />
+
+          {/* Sick Leave */}
+          <Input
+            label="Sick Leave Allowed"
+            placeholder="Enter allowed sick leave"
+            type="number"
+            {...register("leaves.sick.allowed", { valueAsNumber: true })}
+            error={(errors?.leaves as any)?.sick?.allowed?.message?.toString()}
+          />
+
+          <Input
+            label="Sick Leave Taken"
+            placeholder="Enter taken sick leave"
+            type="number"
+            {...register("leaves.sick.taken", { valueAsNumber: true })}
+            error={(errors?.leaves as any)?.sick?.taken?.message?.toString()}
+          />
+
+          {/* Annual Leave */}
+          <Input
+            label="Annual Leave Allowed"
+            placeholder="Enter allowed annual leave"
+            type="number"
+            {...register("leaves.annual.allowed", { valueAsNumber: true })}
+            error={(
+              errors?.leaves as any
+            )?.annual?.allowed?.message?.toString()}
+          />
+
+          <Input
+            label="Annual Leave Taken"
+            placeholder="Enter taken annual leave"
+            type="number"
+            {...register("leaves.annual.taken", { valueAsNumber: true })}
+            error={(errors?.leaves as any)?.annual?.taken?.message?.toString()}
+          />
+
+          {/* Total Leave */}
+          <Input
+            label="Total Leave Allowed"
+            placeholder="Enter allowed total leave"
+            type="number"
+            {...register("leaves.total.allowed", { valueAsNumber: true })}
+            error={(errors?.leaves as any)?.total?.allowed?.message?.toString()}
+          />
+
+          <Input
+            label="Total Leave Taken"
+            placeholder="Enter taken total leave"
+            type="number"
+            {...register("leaves.total.taken", { valueAsNumber: true })}
+            error={(errors?.leaves as any)?.total?.taken?.message?.toString()}
+          />
+        </div>
+      </div>
 
       {/* Section: Additional Information */}
       <div>

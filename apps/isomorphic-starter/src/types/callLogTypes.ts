@@ -8,7 +8,7 @@ export interface CallLogType {
   purpose_of_call: string; // Purpose of Call
   call_handled_by?: string; // Call Handled By (Employee Name)
   reminder_action_date?: string; // Set Reminder for Action (Optional)
-  call_outcome?: string; // Call Outcome/Action Taken (Optional)
+  // call_outcome?: string; // Call Outcome/Action Taken (Optional)
   tenant_id: string; // Associated Tenant ID
   organization_id: string; // Associated Organization ID
   createdAt: string; // Call log creation date

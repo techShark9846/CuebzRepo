@@ -27,9 +27,9 @@ export default function DeleteConfirmModal({
       <div className="fixed inset-0 bg-black/30 z-[1000] flex items-center justify-center px-4">
         <Dialog.Panel className="w-full max-w-sm bg-white rounded-lg shadow-xl dark:bg-gray-900 p-6 space-y-4">
           <div className="flex items-center gap-3">
-            <div className="text-red-500 text-2xl">
+            {/* <div className="text-red-500 text-2xl">
               <MdWarning />
-            </div>
+            </div> */}
             <Dialog.Title className="text-lg font-semibold text-gray-800 dark:text-white">
               {title}
             </Dialog.Title>
@@ -44,7 +44,7 @@ export default function DeleteConfirmModal({
             </Button>
             <Button
               variant="solid"
-              color="danger"
+              // color="danger"
               onClick={onConfirm}
               isLoading={loading}
             >

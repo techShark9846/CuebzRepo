@@ -102,7 +102,7 @@ export default function PettyCashForm({ filePreviews, setFilePreviews }: any) {
             label="Transaction Type"
             placeholder="Select transaction type"
             options={[
-              { value: "Add", label: "Add" },
+              { value: "Add", label: "Deposit" },
               { value: "Expense", label: "Expense" },
             ]}
             value={
@@ -146,7 +146,7 @@ export default function PettyCashForm({ filePreviews, setFilePreviews }: any) {
 
           {/* Amount */}
           <Input
-            label="Amount"
+            label="Amount (AED)"
             placeholder="Enter amount"
             type="number"
             {...register("amount", { valueAsNumber: true })}
@@ -154,10 +154,22 @@ export default function PettyCashForm({ filePreviews, setFilePreviews }: any) {
           />
 
           {/* Purpose */}
-          <Input
+          <Select
             label="Purpose"
-            placeholder="Enter purpose"
-            {...register("purpose")}
+            placeholder="Select purpose"
+            options={[
+              { value: "Office Supplies", label: "Office Supplies" },
+              { value: "Staff Meals", label: "Staff Meals" },
+              { value: "Courier", label: "Courier" },
+              { value: "Transport", label: "Transport" },
+              { value: "Misc", label: "Misc" },
+            ]}
+            value={
+              watch("purpose")
+                ? { value: watch("purpose"), label: watch("purpose") }
+                : null
+            }
+            onChange={(option: any) => setValue("purpose", option?.value || "")}
             error={errors.purpose?.message?.toString()}
           />
 

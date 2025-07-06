@@ -350,7 +350,7 @@ export default function PettyCashTable({
   const transactionCardsData = [
     {
       title: "Total Received",
-      amount: `₹${summaryData.totalReceived.toLocaleString()}`,
+      amount: `AED ${summaryData.totalReceived.toLocaleString()}`,
       increased: true,
       percentage: "N/A",
       icon: PiCurrencyCircleDollar,
@@ -358,7 +358,7 @@ export default function PettyCashTable({
     },
     {
       title: "Total Expense",
-      amount: `₹${summaryData.totalExpense.toLocaleString()}`,
+      amount: `AED ${summaryData.totalExpense.toLocaleString()}`,
       increased: false,
       percentage: "N/A",
       icon: PiWalletBold,
@@ -366,7 +366,7 @@ export default function PettyCashTable({
     },
     {
       title: "Balance Amount",
-      amount: `₹${summaryData.balanceAmount.toLocaleString()}`,
+      amount: `AED ${summaryData.balanceAmount.toLocaleString()}`,
       increased: summaryData.balanceAmount >= 0,
       percentage: "N/A",
       icon: PiBank,
@@ -379,7 +379,7 @@ export default function PettyCashTable({
     columnConfig: [
       {
         accessorKey: "transaction_type",
-        header: "Transaction Type",
+        header: "Deposit / Expense",
         cell: ({ row }: any) => {
           const transaction_type = row.original.transaction_type;
 
@@ -418,7 +418,7 @@ export default function PettyCashTable({
         cell: ({ row }: any) => (
           <b
             className={`${row.original.transaction_type === "Add" ? "text-green-dark" : "text-red-dark"} `}
-          >{`₹${row.original.amount || "N/A"}`}</b>
+          >{`AED ${row.original.amount || "N/A"}`}</b>
         ),
       },
       { accessorKey: "purpose", header: "Purpose" },

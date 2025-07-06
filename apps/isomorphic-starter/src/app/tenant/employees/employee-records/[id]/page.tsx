@@ -94,7 +94,7 @@ export default function EmployeeDetailsPage() {
                 />
                 <DetailRow label="Blood Group" value={employee.blood_group} />
                 <DetailRow
-                  label="UAE Contact Number"
+                  label="Contact Number"
                   value={employee.uae_contact_number}
                 />
                 <DetailRow

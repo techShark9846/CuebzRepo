@@ -24,12 +24,15 @@ export default function OtpForm() {
       await authService.verifyOtp({ email, otp: data.otp });
 
       // Success toast
-      toast.success("Register successful! OTP verified", { id: toastId });
+      toast.success(
+        "Successfully Created Account. Our Dedicate Team Will Approve Your Account Sooner. Once Done You Will Notified By Email",
+        { id: toastId }
+      );
 
-      // Redirect to dashboard
-      router.replace("/dashboard");
+      // Redirect to signin
+      router.replace("/signin");
 
-      window.location.reload();
+      // window.location.reload();
     } catch (error: any) {
       console.log("Login Error:", error.message);
       // Show error toast

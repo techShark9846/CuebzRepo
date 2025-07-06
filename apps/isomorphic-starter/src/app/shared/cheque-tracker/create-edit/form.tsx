@@ -379,9 +379,27 @@ export default function ChequeTrackerForm({
             )}
           </div>
 
+          <Select
+            label="Cheque Type"
+            placeholder="Select cheque type"
+            options={[
+              { value: "Incoming", label: "Incoming" },
+              { value: "Outgoing", label: "Outgoing" },
+            ]}
+            value={
+              watch("cheque_type")
+                ? { value: watch("cheque_type"), label: watch("cheque_type") }
+                : null
+            }
+            onChange={(option: any) =>
+              setValue("cheque_type", option?.value || "Incoming")
+            }
+            error={errors.cheque_type?.message?.toString()}
+          />
+
           {/* Amount */}
           <Input
-            label="Amount"
+            label="Amount (AED)"
             placeholder="Enter amount"
             type="number"
             {...register("amount", { valueAsNumber: true })}
@@ -396,21 +414,39 @@ export default function ChequeTrackerForm({
             error={errors.bank_name?.message?.toString()}
           />
 
+          {watch("cheque_type") === "Outgoing" && (
+            <Input
+              label="Payee Name"
+              placeholder="Enter payee name"
+              {...register("payee_name")}
+              error={errors.payee_name?.message?.toString()}
+            />
+          )}
+
+          {watch("cheque_type") === "Incoming" && (
+            <Input
+              label="Payer Name"
+              placeholder="Enter payer name"
+              {...register("payeer_name")}
+              error={errors.payeer_name?.message?.toString()}
+            />
+          )}
+
           {/* Payee Name */}
-          <Input
+          {/* <Input
             label="Payee Name"
             placeholder="Enter payee name"
             {...register("payee_name")}
             error={errors.payee_name?.message?.toString()}
-          />
+          /> */}
 
           {/* Payer Name */}
-          <Input
+          {/* <Input
             label="Payer Name"
             placeholder="Enter payer name"
             {...register("payeer_name")}
             error={errors.payeer_name?.message?.toString()}
-          />
+          /> */}
 
           {/* Purpose */}
           <Input
@@ -478,9 +514,15 @@ export default function ChequeTrackerForm({
         {...register("additional_notes")}
         error={errors.additional_notes?.message?.toString()}
       />
+    </div>
+  );
+}
 
-      {/* Attachments */}
-      <div>
+{
+  /* Attachments */
+}
+{
+  /* <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Attachments
         </label>
@@ -497,7 +539,5 @@ export default function ChequeTrackerForm({
           </p>
         )}
         {renderMultipleFilePreviews(filePreviews.attachments, "attachments")}
-      </div>
-    </div>
-  );
+      </div> */
 }

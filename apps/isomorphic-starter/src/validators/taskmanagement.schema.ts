@@ -18,8 +18,8 @@ export const taskManagementSchema = z.object({
     .max(1000, { message: "Task description cannot exceed 1000 characters." }),
   assignedTo: z.string().min(1, { message: "Assigned employee is required." }),
   priority: z
-    .enum(["High", "Medium", "Low"], {
-      message: "Priority must be either 'High', 'Medium', or 'Low'.",
+    .enum(["High", "Medium", "Low", "Urgent"], {
+      message: "Priority must be either 'High', 'Medium', 'Urgent' or 'Low'.",
     })
     .default("Medium"),
   dueDate: z.string().refine((value) => !isNaN(Date.parse(value)), {

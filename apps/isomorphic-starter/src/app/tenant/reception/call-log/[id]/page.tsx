@@ -108,7 +108,7 @@ export default function CallLogDetailsPage() {
                   label="Call Handled By"
                   value={callLog.call_handled_by}
                 />
-                <DetailRow label="Call Outcome" value={callLog.call_outcome} />
+                {/* <DetailRow label="Call Outcome" value={callLog.call_outcome} /> */}
               </div>
             </Tab.Panel>
 

@@ -53,7 +53,7 @@ export default function PettyCashDetailsModal({
         <div>
           <p className="text-sm text-gray-500">Amount</p>
           <p className="text-lg font-medium text-gray-900">
-            {pettyCash.amount ? `₹${pettyCash.amount}` : "N/A"}
+            {pettyCash.amount ? `AED ${pettyCash.amount}` : "N/A"}
           </p>
         </div>
 

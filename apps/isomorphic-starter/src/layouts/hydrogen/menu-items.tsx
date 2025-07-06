@@ -1,49 +1,15 @@
 import { routesSuperAdmin, routesTenant } from "@/config/routes";
-import { DUMMY_ID, MODULES } from "@/config/constants";
+import { MODULES } from "@/config/constants";
 import {
-  PiShoppingCartDuotone,
-  PiHeadsetDuotone,
-  PiPackageDuotone,
   PiChartBarDuotone,
+  PiHeadsetDuotone,
+  PiUsersThreeDuotone,
   PiCurrencyDollarDuotone,
-  PiSquaresFourDuotone,
-  PiGridFourDuotone,
-  PiFeatherDuotone,
-  PiChartLineUpDuotone,
-  PiMapPinLineDuotone,
-  PiUserGearDuotone,
-  PiBellSimpleRingingDuotone,
-  PiUserDuotone,
-  PiEnvelopeSimpleOpenDuotone,
-  PiStepsDuotone,
-  PiCreditCardDuotone,
-  PiTableDuotone,
-  PiBrowserDuotone,
-  PiHourglassSimpleDuotone,
-  PiUserCircleDuotone,
-  PiShootingStarDuotone,
-  PiRocketLaunchDuotone,
-  PiFolderLockDuotone,
-  PiBinocularsDuotone,
-  PiHammerDuotone,
-  PiNoteBlankDuotone,
-  PiUserPlusDuotone,
-  PiShieldCheckDuotone,
-  PiLockKeyDuotone,
-  PiChatCenteredDotsDuotone,
-  PiCalendarPlusDuotone,
-  PiEnvelopeDuotone,
-  PiCurrencyCircleDollarDuotone,
+  PiStorefrontDuotone,
   PiBriefcaseDuotone,
-  PiHouseLineDuotone,
-  PiAirplaneTiltDuotone,
-  PiFolder,
-  PiCaretCircleUpDownDuotone,
-  PiListNumbersDuotone,
-  PiCoinDuotone,
-  PiCalendarDuotone,
-  PiShapesDuotone,
+  PiBuildingsDuotone,
   PiNewspaperClippingDuotone,
+  PiUserCircleDuotone,
 } from "react-icons/pi";
 
 // Note: do not add href in the label object, it is rendering as label
@@ -81,11 +47,6 @@ export const menuItemsSuperAmin = [
 ];
 
 export const menuItemsTenant = [
-  // label start
-  // {
-  //   name: "Overview",
-  // },
-  // label end
   {
     name: "Analytics",
     href: "/dashboard",
@@ -112,7 +73,7 @@ export const menuItemsTenant = [
   {
     name: "Employees",
     href: "#",
-    icon: <PiHeadsetDuotone />,
+    icon: <PiUsersThreeDuotone />,
     dropdownItems: [
       {
         name: "Employee Records",
@@ -127,9 +88,9 @@ export const menuItemsTenant = [
     ],
   },
   {
-    name: "Financial",
+    name: "Finance",
     href: "#",
-    icon: <PiHeadsetDuotone />,
+    icon: <PiCurrencyDollarDuotone />,
     dropdownItems: [
       {
         name: "Cheque Tracker",
@@ -146,7 +107,7 @@ export const menuItemsTenant = [
   {
     name: "Customers & Vendors",
     href: "#",
-    icon: <PiHeadsetDuotone />,
+    icon: <PiStorefrontDuotone />,
     dropdownItems: [
       {
         name: "Customer",
@@ -160,11 +121,10 @@ export const menuItemsTenant = [
       },
     ],
   },
-
   {
     name: "Sales Management",
     href: "#",
-    icon: <PiHeadsetDuotone />,
+    icon: <PiBriefcaseDuotone />,
     dropdownItems: [
       {
         name: "Leads",
@@ -183,11 +143,10 @@ export const menuItemsTenant = [
       },
     ],
   },
-
   {
     name: "Company",
     href: "#",
-    icon: <PiHeadsetDuotone />,
+    icon: <PiBuildingsDuotone />,
     dropdownItems: [
       {
         name: "Documents",
@@ -216,18 +175,16 @@ export const menuItemsTenant = [
       },
     ],
   },
-
   {
     name: "News & Updates",
     href: routesTenant.newsUpdates,
     key: MODULES.newsUpdates,
-    icon: <PiChartBarDuotone />,
+    icon: <PiNewspaperClippingDuotone />,
   },
-
   {
     name: "Roles & Users",
     href: routesTenant.rolesUser.roleUserList,
-    icon: <PiFolder />,
+    icon: <PiUserCircleDuotone />,
     badge: "",
   },
 ];

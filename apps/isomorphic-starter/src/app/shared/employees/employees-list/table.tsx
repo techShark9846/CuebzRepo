@@ -12,12 +12,9 @@ import dayjs from "dayjs";
 import { debounce } from "lodash";
 import DeletePopover from "@core/components/delete-popover";
 import { EmployeeType } from "@/types/employeeTypes";
-import { useModal } from "../../modal-views/use-modal";
-import EmployeeDetailsModal from "./EmployeeDetailsModal";
-import { FiEye, FiEdit, FiTrash } from "react-icons/fi";
-import { useRouter } from "next/navigation";
-import { routesTenant } from "@/config/routes";
-import Link from "next/link";
+import EmployeeDetailsDrawer from "./EmployeeDetailsDrawer";
+import EmployeeEditDrawer from "../create-edit/EmployeeEditForm";
+import { FiEdit, FiTrash } from "react-icons/fi";
 
 export default function EmployeesTable({
   pageSize = 20,
@@ -39,8 +36,9 @@ export default function EmployeesTable({
     dateOfJoining: null,
   });
 
-  const { openModal, closeModal } = useModal();
-  const router = useRouter();
+  const [selectedEmployee, setSelectedEmployee] = useState({} as EmployeeType);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerEditOpen, setDrawerEditOpen] = useState(false);
 
   const fetchEmployees = async () => {
     setLoading(true);
@@ -96,12 +94,15 @@ export default function EmployeesTable({
         accessorKey: "full_name",
         header: "Full Name",
         cell: ({ row }: any) => (
-          <Link
-            href={`/tenant/employees/employee-records/${row.original._id}`}
+          <button
             className="text-blue-900 underline"
+            onClick={() => {
+              setSelectedEmployee(row.original);
+              setDrawerOpen(true);
+            }}
           >
             {row.original.full_name}
-          </Link>
+          </button>
         ),
       },
       { accessorKey: "department", header: "Department" },
@@ -119,83 +120,6 @@ export default function EmployeesTable({
         header: "Nationality",
         cell: ({ row }: any) => row.original.nationality || "N/A",
       },
-      {
-        accessorKey: "action",
-        header: "Actions",
-        cell: ({ row }) => (
-          <Flex align="center" justify="end" className="pe-4">
-            {/* View Details Action */}
-            <Tooltip
-              size="sm"
-              content="View Details"
-              placement="top"
-              color="invert"
-            >
-              <ActionIcon
-                as="span"
-                size="sm"
-                variant="outline"
-                aria-label="View Details"
-                onClick={() => {
-                  openModal({
-                    view: (
-                      <EmployeeDetailsModal
-                        employee={row.original}
-                        closeModal={closeModal}
-                      />
-                    ),
-                    size: "lg",
-                  });
-                }}
-              >
-                <FiEye />
-              </ActionIcon>
-            </Tooltip>
-
-            {/* Edit Employee Action */}
-            <Tooltip
-              size="sm"
-              content="Edit Employee"
-              placement="top"
-              color="invert"
-            >
-              <ActionIcon
-                as="span"
-                size="sm"
-                variant="outline"
-                aria-label="Edit Employee"
-                onClick={() => {
-                  router.push(
-                    routesTenant.employees.editEmployeeRecord(row.original._id)
-                  );
-                }}
-              >
-                <FiEdit />
-              </ActionIcon>
-            </Tooltip>
-
-            {/* Delete Employee Action */}
-            <DeletePopover
-              title={`Delete Employee`}
-              description={`Are you sure you want to delete ${row.original.full_name}?`}
-              onDelete={async () => {
-                try {
-                  toast.loading("Deleting employee...");
-                  await employeeService.delete(row.original._id);
-                  toast.dismiss();
-                  toast.success(
-                    `${row.original.full_name} deleted successfully.`
-                  );
-                  await fetchEmployees();
-                } catch (error) {
-                  toast.dismiss();
-                  toast.error("Failed to delete employee. Please try again.");
-                }
-              }}
-            />
-          </Flex>
-        ),
-      },
     ],
   });
 
@@ -209,6 +133,13 @@ export default function EmployeesTable({
 
   return (
     <div>
+      <EmployeeDetailsDrawer
+        employee={selectedEmployee}
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        onUpdated={fetchEmployees}
+      />
+
       {!hideFilters && (
         <Filters
           filters={filters}
@@ -217,6 +148,7 @@ export default function EmployeesTable({
           table={table}
         />
       )}
+
       {loading ? (
         <p>Loading...</p>
       ) : (

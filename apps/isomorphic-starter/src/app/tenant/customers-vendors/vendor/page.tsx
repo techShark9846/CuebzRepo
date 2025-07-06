@@ -10,16 +10,7 @@ import { routesTenant } from "@/config/routes";
 export default function VendorsPage() {
   return (
     <>
-      <PageHeader title="Vendors" breadcrumb={[]}>
-        <div className="mt-4 flex items-center gap-3">
-          <Link href={routesTenant.sales.createVendor}>
-            <Button>
-              <PiPlusBold className="me-1.5 size-[17px]" />
-              Add Vendor
-            </Button>
-          </Link>
-        </div>
-      </PageHeader>
+      <PageHeader title="Vendors" breadcrumb={[]}></PageHeader>
       <VendorsTable pageSize={20} />
     </>
   );

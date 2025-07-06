@@ -125,11 +125,13 @@ export default async function middleware(req: NextRequest) {
   // Fetch current user
   let currentUser = null;
   try {
-    const BASE_URL =
-      process.env.NODE_ENV === "development"
-        ? "http://localhost:5000"
-        : "https://api.spydotechnologies.com";
-    const apiResponse = await fetch(`${BASE_URL}/api/auth/profile`, {
+    console.log(process.env.NEXT_PUBLIC_BASE_URL, "enviirr");
+    const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+    // process.env.NODE_ENV === "development"
+    //   ? "http://localhost:5000"
+    //   : "https://api.spydotechnologies.com";
+    console.log(BASE_URL, "SHOOWW");
+    const apiResponse = await fetch(`${BASE_URL}/auth/profile`, {
       credentials: "include",
       headers: {
         Cookie: `session=${sessionCookie}`,

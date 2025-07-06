@@ -92,10 +92,10 @@ export default function CallLogDetailsPage() {
                   value={callLog.visitor_company}
                 />
                 <DetailRow label="Visitor Type" value={callLog.visitor_type} />
-                <DetailRow
+                {/* <DetailRow
                   label="Person Visiting"
                   value={callLog.person_visiting}
-                />
+                /> */}
                 <DetailRow
                   label="Purpose of Visit"
                   value={callLog.purpose_of_visit}

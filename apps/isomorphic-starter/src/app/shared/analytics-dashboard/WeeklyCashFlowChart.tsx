@@ -101,7 +101,7 @@ export default function WeeklyCashFlowChart({
             />
             <YAxis
               label={{
-                value: "Amount (₹)",
+                value: "Amount (AED)",
                 angle: -90,
                 position: "insideLeft",
                 offset: 10,

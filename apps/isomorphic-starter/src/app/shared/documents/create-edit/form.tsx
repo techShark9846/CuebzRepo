@@ -164,8 +164,8 @@ export default function Form({ filePreviews, setFilePreviews }: any) {
           />
 
           <Input
-            label="UAE Contact Number"
-            placeholder="Enter UAE contact number"
+            label="Contact Number"
+            placeholder="Enter Contact Number"
             {...register("uae_contact_number")}
             error={errors.uae_contact_number?.message?.toString()}
           />

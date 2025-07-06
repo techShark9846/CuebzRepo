@@ -16,8 +16,8 @@ export default function PageHeader({
 }: React.PropsWithChildren<PageHeaderTypes>) {
   return (
     <header
-      className={cn("@container xs:-mt-2 mt-9", className)}
-      style={{ marginTop: "12px" }}
+      className={cn("@container xs:-mt-2", className)}
+      style={{ marginTop: "20px" }}
     >
       <div className="flex flex-col @lg:flex-row @lg:items-center @lg:justify-between">
         <div>

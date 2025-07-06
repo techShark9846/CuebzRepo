@@ -4,7 +4,7 @@ export interface EmployeeType {
   organization_id: string; // Associated Organization ID
   full_name: string; // Full Name
   nationality: string; // Nationality
-  uae_contact_number: string; // UAE Contact Number
+  uae_contact_number: string; // Contact Number
   home_country_contact_number: string; // Home Country Contact Number
   emergency_contact_number: string; // Emergency Contact Number
   personal_email: string; // Personal Email

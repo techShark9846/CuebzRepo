@@ -64,6 +64,9 @@ export const chequeTrackerSchema = z.object({
   cheque_date: z.string().refine((value) => !isNaN(Date.parse(value)), {
     message: "Cheque date must be a valid date.",
   }),
+  cheque_type: z.enum(["Incoming", "Outgoing"], {
+    message: "Select a valid cheque type.",
+  }),
   amount: z
     .number()
     .min(0.01, { message: "Amount must be greater than zero." }),
@@ -71,14 +74,8 @@ export const chequeTrackerSchema = z.object({
     .string()
     .min(1, { message: "Bank name is required." })
     .max(100, { message: "Bank name cannot exceed 100 characters." }),
-  payee_name: z
-    .string()
-    .min(1, { message: "Payee name is required." })
-    .max(100, { message: "Payee name cannot exceed 100 characters." }),
-  payeer_name: z
-    .string()
-    .min(1, { message: "Payer name is required." })
-    .max(100, { message: "Payer name cannot exceed 100 characters." }),
+  payee_name: z.string().optional(),
+  payeer_name: z.string().optional(),
   purpose: z
     .string()
     .min(1, { message: "Purpose is required." })

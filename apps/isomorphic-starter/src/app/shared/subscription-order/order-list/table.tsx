@@ -279,10 +279,10 @@ export default function SubscriptionOrdersTable({
     fetchOrders();
   };
 
-  const BASE_URL =
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:5000"
-      : "https://api.spydotechnologies.com";
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+  // process.env.NODE_ENV === "development"
+  //   ? "http://localhost:5000"
+  //   : "https://api.spydotechnologies.com";
 
   const { table } = useTanStackTable<SubscriptionOrderType>({
     tableData: data,

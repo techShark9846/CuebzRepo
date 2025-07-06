@@ -8,16 +8,7 @@ import { routesTenant } from "@/config/routes";
 export default function CallLogsPage() {
   return (
     <>
-      <PageHeader title="Call Logs" breadcrumb={[]}>
-        <div className="mt-4 flex items-center gap-3">
-          <Link href={routesTenant.reception.createCallLog}>
-            <Button>
-              <PiPlusBold className="me-1.5 size-[17px]" />
-              Add Call Log
-            </Button>
-          </Link>
-        </div>
-      </PageHeader>
+      <PageHeader title="Call Logs" breadcrumb={[]}></PageHeader>
       <CallLogsTable pageSize={20} />
     </>
   );

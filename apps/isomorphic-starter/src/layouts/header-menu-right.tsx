@@ -141,7 +141,8 @@ export default function HeaderMenuRight() {
       </NotificationDropdown>
 
       {/* Settings */}
-      <FcSettings className="w-6 h-6 cursor-pointer text-white" />
+
+      <FcSettings className="w-6 h-6 cursor-pointer text-white" color="#fff" />
 
       {/* Profile Menu */}
       <ProfileMenu />

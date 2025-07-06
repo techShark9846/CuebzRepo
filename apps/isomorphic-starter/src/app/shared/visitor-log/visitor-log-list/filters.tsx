@@ -6,10 +6,12 @@ import {
   PiMagnifyingGlassBold,
   PiFunnel,
   PiTrashDuotone,
+  PiPlusBold,
 } from "react-icons/pi";
 import FilterDrawerView from "@core/components/controlled-table/table-filter";
 import ToggleColumns from "@core/components/table-utils/toggle-columns";
 import { DatePicker } from "@core/ui/datepicker";
+import Link from "next/link";
 
 interface IFilters {
   filters: any;
@@ -51,20 +53,32 @@ export default function Filters({
   return (
     <Flex align="center" justify="between" className="mb-4">
       {/* Global Search */}
-      <Input
-        type="search"
-        placeholder="Search by visitor name..."
-        value={filters.globalSearch}
-        onClear={() =>
-          setFilters((prev: any) => ({ ...prev, globalSearch: "" }))
-        }
-        onChange={(e) =>
-          setFilters((prev: any) => ({ ...prev, globalSearch: e.target.value }))
-        }
-        inputClassName="h-9"
-        clearable={true}
-        prefix={<PiMagnifyingGlassBold className="size-4" />}
-      />
+
+      <div className="flex gap-2">
+        <Link href="/tenant/reception/visitor-log/create">
+          <Button>
+            Add Visitor
+            <PiPlusBold className="ml-2 size-[17px]" />
+          </Button>
+        </Link>
+        <Input
+          type="search"
+          placeholder="Search by visitor name..."
+          value={filters.globalSearch}
+          onClear={() =>
+            setFilters((prev: any) => ({ ...prev, globalSearch: "" }))
+          }
+          onChange={(e) =>
+            setFilters((prev: any) => ({
+              ...prev,
+              globalSearch: e.target.value,
+            }))
+          }
+          inputClassName="h-10"
+          clearable={true}
+          prefix={<PiMagnifyingGlassBold className="size-4" />}
+        />
+      </div>
 
       {/* Filters Drawer */}
       <FilterDrawerView
@@ -119,7 +133,7 @@ export default function Filters({
           />
 
           {/* Status Filter */}
-          <Select
+          {/* <Select
             label="Filter by Status"
             placeholder="Select Status"
             value={
@@ -141,7 +155,7 @@ export default function Filters({
                 status: option?.value || "",
               }))
             }
-          />
+          /> */}
         </div>
       </FilterDrawerView>
 

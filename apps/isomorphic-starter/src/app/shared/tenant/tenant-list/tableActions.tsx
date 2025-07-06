@@ -116,20 +116,16 @@
 //     </Flex>
 //   );
 // }
+"use client";
 
-import { Dropdown, ActionIcon, Tooltip, Flex } from "rizzui";
-import {
-  FiEye,
-  FiEdit,
-  FiTrash2,
-  FiPlus,
-  FiRefreshCw,
-  FiTool,
-} from "react-icons/fi";
-import { useModal } from "@/app/shared/modal-views/use-modal";
+import { useState } from "react";
+import { Dropdown, ActionIcon, Tooltip, Flex, Button } from "rizzui";
+import { FiEye, FiEdit, FiTool, FiPlus, FiRefreshCw } from "react-icons/fi";
+import { MdCheckCircle, MdCancel } from "react-icons/md";
+import Link from "next/link";
 import toast from "react-hot-toast";
 import { routesSuperAdmin } from "@/config/routes";
-import Link from "next/link";
+import { useModal } from "@/app/shared/modal-views/use-modal";
 import tenantService from "@/services/tenantService";
 import SubscriptionModal from "@/app/shared/tenant/tenant-list/tenantSubscription";
 import TenantDetailsModal from "./tenantDetails";
@@ -145,6 +141,13 @@ export default function TenantsTableActions({
 }: ITenantProps) {
   const { openModal, closeModal } = useModal();
 
+  const [approving, setApproving] = useState(false);
+  const [rejecting, setRejecting] = useState(false);
+
+  const hasSubscription = !!row?.original?.subscription_plan;
+  const isPendingApproval =
+    row.original.subscription_status === "PendingApproval";
+
   const handleSubscriptionAction = async (action: any) => {
     openModal({
       view: (
@@ -154,7 +157,7 @@ export default function TenantsTableActions({
           onSuccess={() => {
             toast.success(`Subscription ${action}d successfully.`);
             closeModal();
-            fetchTenants(); // Refresh the table
+            fetchTenants();
           }}
         />
       ),
@@ -162,28 +165,48 @@ export default function TenantsTableActions({
     });
   };
 
-  const handleDelete = async () => {
+  const handleApprove = async () => {
     try {
-      await tenantService.delete(row.original._id);
-      toast.success("Tenant deleted successfully.");
-      fetchTenants(); // Refresh the table
-    } catch (error) {
-      toast.error("Failed to delete the tenant.");
+      setApproving(true);
+      toast.loading("Approving tenant...");
+      await tenantService.approve(row.original._id);
+      toast.dismiss();
+      toast.success("Tenant approved successfully.");
+      fetchTenants();
+    } catch {
+      toast.dismiss();
+      toast.error("Failed to approve tenant.");
+    } finally {
+      setApproving(false);
     }
   };
 
-  const hasSubscription = !!row?.original?.subscription_plan;
+  const handleReject = async () => {
+    try {
+      setRejecting(true);
+      toast.loading("Rejecting tenant...");
+      await tenantService.reject(row.original._id);
+      toast.dismiss();
+      toast.success("Tenant rejected successfully.");
+      fetchTenants();
+    } catch {
+      toast.dismiss();
+      toast.error("Failed to reject tenant.");
+    } finally {
+      setRejecting(false);
+    }
+  };
 
   return (
-    <Flex align="center" justify="end" className="pe-4">
-      {/* View Details Button */}
+    <Flex align="center" justify="end" className="pe-4 gap-2">
+      {/* View Details */}
       <Tooltip size="sm" content="View Details" placement="top" color="invert">
         <ActionIcon
           as="span"
           size="sm"
           variant="outline"
           aria-label="View Details"
-          onClick={() => {
+          onClick={() =>
             openModal({
               view: (
                 <TenantDetailsModal
@@ -192,14 +215,46 @@ export default function TenantsTableActions({
                 />
               ),
               size: "lg",
-            });
-          }}
+            })
+          }
         >
           <FiEye />
         </ActionIcon>
       </Tooltip>
 
-      {/* Dropdown for Other Actions */}
+      {/* Approve/Reject */}
+      {isPendingApproval && (
+        <>
+          <Tooltip content="Approve Tenant">
+            <Button
+              size="sm"
+              // color="success"
+              variant="outline"
+              isLoading={approving}
+              onClick={handleApprove}
+              className="gap-1"
+            >
+              <MdCheckCircle className="w-4 h-4" />
+              Approve
+            </Button>
+          </Tooltip>
+          <Tooltip content="Reject Tenant">
+            <Button
+              size="sm"
+              color="danger"
+              variant="outline"
+              isLoading={rejecting}
+              onClick={handleReject}
+              className="gap-1"
+            >
+              <MdCancel className="w-4 h-4" />
+              Reject
+            </Button>
+          </Tooltip>
+        </>
+      )}
+
+      {/* Dropdown */}
       <Dropdown placement="bottom-end">
         <Dropdown.Trigger>
           <ActionIcon variant="outline" rounded="full">
@@ -231,12 +286,12 @@ export default function TenantsTableActions({
             <div className="mb-2 pt-2">
               <Dropdown.Item onClick={() => handleSubscriptionAction("update")}>
                 <Flex align="center" gap="2">
-                  Update Subscription
+                  <FiRefreshCw /> Update Subscription
                 </Flex>
               </Dropdown.Item>
               <Dropdown.Item onClick={() => handleSubscriptionAction("renew")}>
                 <Flex align="center" gap="2">
-                  Renew Subscription
+                  <FiRefreshCw /> Renew Subscription
                 </Flex>
               </Dropdown.Item>
             </div>

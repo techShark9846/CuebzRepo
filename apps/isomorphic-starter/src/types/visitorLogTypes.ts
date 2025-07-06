@@ -7,7 +7,7 @@ export interface VisitorLogType {
   visitor_type: "Customer" | "Vendor" | "Interview" | "Other"; // Type of the visitor
   visitor_contact_number: string; // Contact number of the visitor
   purpose_of_visit: string; // Purpose of the visit
-  person_visiting?: string; // Name of the employee being visited (optional)
+  // person_visiting?: string; // Name of the employee being visited (optional)
   reminder_action_date?: string; // Reminder date for follow-up (optional)
   comments?: string; // Additional comments or notes (optional)
   createdAt: string; // Timestamp when the visitor log was created

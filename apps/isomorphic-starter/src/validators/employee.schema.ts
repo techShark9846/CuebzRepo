@@ -7,7 +7,6 @@ const fileOrUrlSchema = z.union([
   z.string().url({ message: "Must be a valid URL." }),
 ]);
 
-// Employee Schema Validation
 export const employeeSchema = z.object({
   full_name: z
     .string()
@@ -17,10 +16,9 @@ export const employeeSchema = z.object({
     .string()
     .min(1, { message: "Nationality is required." })
     .max(100, { message: "Nationality cannot exceed 100 characters." }),
-  uae_contact_number: z
-    .string()
-    .min(10, { message: "UAE contact number must be at least 10 digits." })
-    .max(15, { message: "UAE contact number cannot exceed 15 digits." }),
+  uae_contact_number: z.string().regex(/^05\d{8}$/, {
+    message: "Enter a valid UAE mobile number (e.g. 0501234567).",
+  }),
   home_country_contact_number: z
     .string()
     .min(10, {
@@ -50,27 +48,11 @@ export const employeeSchema = z.object({
       message: "Date of birth must be a valid date.",
     })
     .optional(),
-  blood_group: z.string().optional(),
-  // emirates_id: z
-  //   .string()
-  //   .min(1, { message: "Emirates ID is required." })
-  //   .max(100, { message: "Emirates ID cannot exceed 100 characters." }),
-  // passport_id: z
-  //   .string()
-  //   .min(1, { message: "Passport ID is required." })
-  //   .max(100, { message: "Passport ID cannot exceed 100 characters." }),
-  // visa_copy: z
-  //   .string()
-  //   .min(1, { message: "Visa copy is required." })
-  //   .max(500, { message: "Visa copy URL cannot exceed 500 characters." }),
-  // cv: z
-  //   .string()
-  //   .min(1, { message: "CV is required." })
-  //   .max(500, { message: "CV URL cannot exceed 500 characters." }),
-  // photo: z
-  //   .string()
-  //   .max(500, { message: "Photo URL cannot exceed 500 characters." })
-  //   .optional(),
+  blood_group: z
+    .enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], {
+      errorMap: () => ({ message: "Select a valid blood group." }),
+    })
+    .optional(),
 
   emirates_id: fileOrUrlSchema,
   passport_id: fileOrUrlSchema,
@@ -89,7 +71,29 @@ export const employeeSchema = z.object({
     .string()
     .min(1, { message: "Job title is required." })
     .max(100, { message: "Job title cannot exceed 100 characters." }),
-  reporting_manager: z.string().optional(), // Assume ObjectId as string
+
+  employee_code: z
+    .string()
+    .min(1, { message: "Employee code is required." })
+    .max(50, { message: "Employee code cannot exceed 50 characters." }),
+
+  employee_type: z.enum(
+    ["Permanent", "Contract", "Part-Time", "Intern", "Other"],
+    {
+      errorMap: () => ({
+        message: "Select a valid employee type.",
+      }),
+    }
+  ),
+
+  total_years_in_company: z
+    .number({
+      invalid_type_error: "Total years must be a number.",
+    })
+    .min(0, { message: "Total years cannot be negative." })
+    .max(50, { message: "Total years cannot exceed 50." }),
+
+  reporting_manager: z.string().optional(),
   uae_address: z
     .string()
     .min(1, { message: "UAE address is required." })
@@ -112,6 +116,13 @@ export const employeeSchema = z.object({
       iban: z
         .string()
         .max(34, { message: "IBAN cannot exceed 34 characters." })
+        .optional(),
+      salary_transfer_mode: z
+        .enum(["Bank Transfer", "Cash", "Cheque"], {
+          errorMap: () => ({
+            message: "Select a valid salary transfer mode.",
+          }),
+        })
         .optional(),
     })
     .optional(),
@@ -140,7 +151,80 @@ export const employeeSchema = z.object({
     .string()
     .max(1000, { message: "Comments cannot exceed 1000 characters." })
     .optional(),
+
+  // ✅ Leaves
+  leaves: z
+    .object({
+      casual: z
+        .object({
+          allowed: z
+            .number()
+            .min(0, { message: "Casual leave allowed cannot be negative." })
+            .optional(),
+          taken: z
+            .number()
+            .min(0, { message: "Casual leave taken cannot be negative." })
+            .optional(),
+        })
+        .optional(),
+      sick: z
+        .object({
+          allowed: z
+            .number()
+            .min(0, { message: "Sick leave allowed cannot be negative." })
+            .optional(),
+          taken: z
+            .number()
+            .min(0, { message: "Sick leave taken cannot be negative." })
+            .optional(),
+        })
+        .optional(),
+      annual: z
+        .object({
+          allowed: z
+            .number()
+            .min(0, { message: "Annual leave allowed cannot be negative." })
+            .optional(),
+          taken: z
+            .number()
+            .min(0, { message: "Annual leave taken cannot be negative." })
+            .optional(),
+        })
+        .optional(),
+      total: z
+        .object({
+          allowed: z
+            .number()
+            .min(0, { message: "Total leave allowed cannot be negative." })
+            .optional(),
+          taken: z
+            .number()
+            .min(0, { message: "Total leave taken cannot be negative." })
+            .optional(),
+        })
+        .optional(),
+    })
+    .optional(),
 });
 
-// Infer TypeScript types from the schema
 export type EmployeeSchema = z.infer<typeof employeeSchema>;
+
+//   .string()
+//   .min(1, { message: "Emirates ID is required." })
+//   .max(100, { message: "Emirates ID cannot exceed 100 characters." }),
+// passport_id: z
+//   .string()
+//   .min(1, { message: "Passport ID is required." })
+//   .max(100, { message: "Passport ID cannot exceed 100 characters." }),
+// visa_copy: z
+//   .string()
+//   .min(1, { message: "Visa copy is required." })
+//   .max(500, { message: "Visa copy URL cannot exceed 500 characters." }),
+// cv: z
+//   .string()
+//   .min(1, { message: "CV is required." })
+//   .max(500, { message: "CV URL cannot exceed 500 characters." }),
+// photo: z
+//   .string()
+//   .max(500, { message: "Photo URL cannot exceed 500 characters." })
+//   .optional(),

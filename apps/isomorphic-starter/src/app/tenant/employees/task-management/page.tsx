@@ -8,16 +8,7 @@ import { routesTenant } from "../../../../config/routes";
 export default function TaskManagementPage() {
   return (
     <>
-      <PageHeader title="Task Management" breadcrumb={[]}>
-        <div className="mt-4 flex items-center gap-3">
-          <Link href={routesTenant.employees.createTaskManagementRecord}>
-            <Button>
-              <PiPlusBold className="me-1.5 size-[17px]" />
-              Add Task
-            </Button>
-          </Link>
-        </div>
-      </PageHeader>
+      <PageHeader title="Task Management" breadcrumb={[]}></PageHeader>
       <TasksTable pageSize={20} />
     </>
   );

@@ -48,9 +48,9 @@ export default function EmployeeDetailsModal({
           </p>
         </div>
 
-        {/* UAE Contact Number */}
+        {/* Contact Number */}
         <div>
-          <p className="text-sm text-gray-500">UAE Contact Number</p>
+          <p className="text-sm text-gray-500">Contact Number</p>
           <p className="text-lg font-medium text-gray-900">
             {employee.uae_contact_number || "N/A"}
           </p>

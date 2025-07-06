@@ -583,7 +583,7 @@ export function SidebarMenu({
                       <div
                         onClick={() => setOpenIndex(isOpen ? null : index)}
                         className={cn(
-                          "flex items-center justify-between cursor-pointer rounded-md px-3 py-2 font-medium text-sm transition-colors duration-150",
+                          "flex items-center justify-between cursor-pointer rounded-md my-1 px-3 py-2 font-medium text-sm transition-colors duration-150",
                           isOpen
                             ? "bg-yellow-400 text-white"
                             : "text-gray-800 hover:bg-gray-100"

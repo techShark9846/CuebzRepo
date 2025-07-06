@@ -6,10 +6,13 @@ import {
   PiMagnifyingGlassBold,
   PiFunnel,
   PiTrashDuotone,
+  PiPlusBold,
 } from "react-icons/pi";
 import FilterDrawerView from "@core/components/controlled-table/table-filter";
 import ToggleColumns from "@core/components/table-utils/toggle-columns";
 import { DatePicker } from "@core/ui/datepicker";
+import Link from "next/link";
+import { routesTenant } from "@/config/routes";
 
 interface IFilters {
   filters: any;
@@ -51,23 +54,31 @@ export default function CallLogFilters({
   return (
     <Flex align="center" justify="between" className="mb-4">
       {/* Global Search */}
-      <Input
-        type="search"
-        placeholder="Search by caller name..."
-        value={filters.globalSearch}
-        onClear={() =>
-          setFilters((prev: any) => ({ ...prev, globalSearch: "" }))
-        }
-        onChange={(e) =>
-          setFilters((prev: any) => ({
-            ...prev,
-            globalSearch: e.target.value,
-          }))
-        }
-        inputClassName="h-9"
-        clearable={true}
-        prefix={<PiMagnifyingGlassBold className="size-4" />}
-      />
+      <div className="flex">
+        <Link href={routesTenant.reception.createCallLog}>
+          <Button>
+            <PiPlusBold className="me-1.5 size-[17px]" />
+            Add Call Log
+          </Button>
+        </Link>
+        <Input
+          type="search"
+          placeholder="Search by caller name..."
+          value={filters.globalSearch}
+          onClear={() =>
+            setFilters((prev: any) => ({ ...prev, globalSearch: "" }))
+          }
+          onChange={(e) =>
+            setFilters((prev: any) => ({
+              ...prev,
+              globalSearch: e.target.value,
+            }))
+          }
+          inputClassName="h-9 ml-4"
+          clearable={true}
+          prefix={<PiMagnifyingGlassBold className="size-4" />}
+        />
+      </div>
 
       {/* Filters Drawer */}
       <FilterDrawerView

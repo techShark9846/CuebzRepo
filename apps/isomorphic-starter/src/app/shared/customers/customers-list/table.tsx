@@ -16,7 +16,6 @@ import { useModal } from "../../modal-views/use-modal";
 import { FiEye, FiEdit, FiTrash } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import CustomerEditDrawer from "../create-edit/CustomerEditForm";
 import CustomerDetailsDrawer from "./CustomerDetailsDrawer";
 
 export default function CustomersTable({
@@ -155,12 +154,6 @@ export default function CustomersTable({
         customer={selectedCustomer}
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
-        setEditOpen={setDrawerEditOpen}
-      />
-      <CustomerEditDrawer
-        customer={selectedCustomer}
-        open={drawerEditOpen}
-        onClose={() => setDrawerEditOpen(false)}
         onUpdated={fetchCustomers}
       />
       {!hideFilters && (

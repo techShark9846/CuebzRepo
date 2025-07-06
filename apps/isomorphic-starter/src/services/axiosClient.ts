@@ -90,11 +90,12 @@ import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 
 // Create an Axios instance
+console.log(process.env.NEXT_PUBLIC_BASE_URL, "enviirr");
 const axiosClient = axios.create({
-  baseURL:
-    process.env.NEXT_PUBLIC_API_URL || process.env.NODE_ENV === "development"
-      ? "http://localhost:5000/api"
-      : "https://api.spydotechnologies.com/api", // API base URL
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  // process.env.NEXT_PUBLIC_API_URL || process.env.NODE_ENV === "development"
+  //   ? "http://localhost:5000/api"
+  //   : "https://api.spydotechnologies.com/api", // API base URL
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",

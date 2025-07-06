@@ -1,8 +1,10 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import { Input, Select, Textarea } from "rizzui";
+import { Button, Input, Select, Textarea, Tooltip } from "rizzui";
 import { DatePicker } from "@core/ui/datepicker";
+import { useEffect, useState } from "react";
+import { MdCheckCircle, MdOutlineCheckCircle } from "react-icons/md";
 
 export default function Form() {
   const {
@@ -11,6 +13,16 @@ export default function Form() {
     watch,
     formState: { errors },
   } = useFormContext();
+
+  const reminderDate = watch("reminder_action_date");
+  const [showFollowUp, setShowFollowUp] = useState(false);
+
+  // Show follow-up section by default if reminder date exists
+  useEffect(() => {
+    if (reminderDate) {
+      setShowFollowUp(true);
+    }
+  }, [reminderDate]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -88,8 +100,79 @@ export default function Form() {
         )}
       </div>
 
+      {/* Toggle Follow-up section */}
+      <div className="col-span-2 flex items-center gap-2">
+        <Tooltip content="Add Next Action / Follow-up Date">
+          <Button
+            type="button"
+            variant="text"
+            size="sm"
+            onClick={() => {
+              setShowFollowUp(!showFollowUp);
+              if (showFollowUp) {
+                setValue("follow_up_comment", "");
+                setValue("reminder_action_date", "");
+              }
+            }}
+            className="text-primary"
+          >
+            {showFollowUp ? (
+              <MdCheckCircle className="w-6 h-6 text-green-600" />
+            ) : (
+              <MdOutlineCheckCircle className="w-6 h-6 text-gray-400" />
+            )}
+          </Button>
+        </Tooltip>
+        <span className="text-sm font-medium text-gray-700">
+          Next Action / Follow-Up
+        </span>
+      </div>
+
+      {/* Follow-Up Fields */}
+      {showFollowUp && (
+        <>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Reminder Date
+            </label>
+            <DatePicker
+              selected={
+                watch("reminder_action_date")
+                  ? new Date(watch("reminder_action_date"))
+                  : null
+              }
+              onChange={(date: Date | null) => {
+                setValue(
+                  "reminder_action_date",
+                  date ? date.toISOString() : null
+                );
+              }}
+              placeholderText="Select a reminder date"
+              dateFormat="dd-MMM-yyyy"
+              className="w-full mt-1"
+            />
+            {errors.reminder_action_date && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.reminder_action_date.message?.toString()}
+              </p>
+            )}
+          </div>
+
+          <div className="col-span-2">
+            <Textarea
+              label="Follow-Up Comment"
+              placeholder="Enter comment or next action note..."
+              {...register("follow_up_comment")}
+              error={errors.follow_up_comment?.message?.toString()}
+              className="mt-1"
+              rows={3}
+            />
+          </div>
+        </>
+      )}
+
       {/* DatePicker for Reminder for Action */}
-      <div>
+      {/* <div>
         <label className="block text-sm font-medium text-gray-700">
           Reminder for Action (Optional)
         </label>
@@ -111,8 +194,8 @@ export default function Form() {
             {errors.reminder_action_date.message?.toString()}
           </p>
         )}
-      </div>
-
+      </div> */}
+      {/* 
       <Select
         label="Status"
         placeholder="Select status"
@@ -124,8 +207,8 @@ export default function Form() {
         value={watch("status")}
         onChange={(option: any) => setValue("status", option?.value || "")}
         error={errors.status?.message?.toString()}
-      />
-
+      /> */}
+      {/* 
       <div className="col-span-1 md:col-span-2">
         <Textarea
           label="Call Outcome/Action Taken (Optional)"
@@ -133,7 +216,7 @@ export default function Form() {
           {...register("call_outcome")}
           error={errors.call_outcome?.message?.toString()}
         />
-      </div>
+      </div> */}
     </div>
   );
 }

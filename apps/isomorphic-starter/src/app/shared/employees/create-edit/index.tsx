@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import FormFooter from "@core/components/form-footer";
 import { routesTenant } from "@/config/routes";
 import { EmployeeType } from "@/types/employeeTypes";
+import { error } from "console";
 
 interface ICreateEditEmployee {
   slug?: string;

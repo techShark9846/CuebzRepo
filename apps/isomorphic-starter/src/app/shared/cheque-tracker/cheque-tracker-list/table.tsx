@@ -238,9 +238,8 @@ import toast from "react-hot-toast";
 import dayjs from "dayjs";
 import { debounce } from "lodash";
 import DeletePopover from "@core/components/delete-popover";
-import ChequeTrackerDetailsModal from "./ChequeTrackerDetailsModal";
+import ChequeTrackerDetailsDrawer from "./ChequeTrackerDetailsDrawer";
 import { FiEye, FiEdit, FiTrash } from "react-icons/fi";
-import { useModal } from "../../modal-views/use-modal";
 import { useRouter } from "next/navigation";
 import { routesTenant } from "@/config/routes";
 import { ChequeTrackerType } from "@/types/chequeTrackerTypes";
@@ -260,11 +259,13 @@ export default function ChequeTrackerTable({
   const [filters, setFilters] = useState({
     globalSearch: "",
     cheque_status: "",
-    // reminder_date: null,
     cheque_date: null,
   });
+  const [selectedCheque, setSelectedCheque] = useState<
+    ChequeTrackerType | null | {}
+  >({});
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const { openModal, closeModal } = useModal();
   const router = useRouter();
 
   const fetchCheques = async () => {
@@ -275,7 +276,6 @@ export default function ChequeTrackerTable({
         limit: pagination.pageSize,
         cheque_status: filters.cheque_status || undefined,
         cheque_date: filters.cheque_date || undefined,
-        // reminder_date: filters.reminder_date || undefined,
         search: filters.globalSearch || undefined,
       });
       const responseData = response?.data || [];
@@ -316,7 +316,22 @@ export default function ChequeTrackerTable({
   const { table } = useTanStackTable<ChequeTrackerType>({
     tableData: data,
     columnConfig: [
-      { accessorKey: "cheque_number", header: "Cheque Number" },
+      {
+        accessorKey: "cheque_number",
+        header: "Cheque Number",
+        cell: ({ row }: any) => (
+          <button
+            onClick={() => {
+              setSelectedCheque(row.original);
+              setDrawerOpen(true);
+            }}
+            className="text-blue-900 underline"
+          >
+            {row.original.cheque_number}
+          </button>
+        ),
+      },
+
       {
         accessorKey: "cheque_date",
         header: "Cheque Date",
@@ -357,95 +372,10 @@ export default function ChequeTrackerTable({
           );
         },
       },
-      // {
-      //   accessorKey: "cheque_date",
-      //   header: "Cheque Date",
-      //   cell: ({ row }: any) =>
-      //     dayjs(row.original.cheque_date).isValid()
-      //       ? dayjs(row.original.cheque_date).format("DD-MMM-YYYY")
-      //       : "N/A",
-      // },
       {
         accessorKey: "amount",
         header: "Amount",
-        cell: ({ row }: any) => `₹${row.original.amount || "N/A"}`,
-      },
-      {
-        accessorKey: "action",
-        header: "Actions",
-        cell: ({ row }) => (
-          <Flex align="center" justify="end" className="pe-4">
-            {/* View Details Action */}
-            <Tooltip
-              size="sm"
-              content="View Details"
-              placement="top"
-              color="invert"
-            >
-              <ActionIcon
-                as="span"
-                size="sm"
-                variant="outline"
-                aria-label="View Details"
-                onClick={() => {
-                  openModal({
-                    view: (
-                      <ChequeTrackerDetailsModal
-                        cheque={row.original}
-                        closeModal={closeModal}
-                      />
-                    ),
-                    size: "lg",
-                  });
-                }}
-              >
-                <FiEye />
-              </ActionIcon>
-            </Tooltip>
-
-            {/* Edit Cheque Action */}
-            <Tooltip
-              size="sm"
-              content="Edit Cheque"
-              placement="top"
-              color="invert"
-            >
-              <ActionIcon
-                as="span"
-                size="sm"
-                variant="outline"
-                aria-label="Edit Cheque"
-                onClick={() => {
-                  router.push(
-                    routesTenant.financials.editChequeTracker(row.original._id)
-                  );
-                }}
-              >
-                <FiEdit />
-              </ActionIcon>
-            </Tooltip>
-
-            {/* Delete Cheque Action */}
-            <DeletePopover
-              title={`Delete Cheque`}
-              description={`Are you sure you want to delete cheque ${row.original.cheque_number}?`}
-              onDelete={async () => {
-                try {
-                  toast.loading("Deleting cheque...");
-                  await chequeTrackerService.delete(row.original._id);
-                  toast.dismiss();
-                  toast.success(
-                    `Cheque ${row.original.cheque_number} deleted successfully.`
-                  );
-                  await fetchCheques();
-                } catch (error) {
-                  toast.dismiss();
-                  toast.error("Failed to delete cheque. Please try again.");
-                }
-              }}
-            />
-          </Flex>
-        ),
+        cell: ({ row }: any) => `AED ${row.original.amount || "N/A"}`,
       },
     ],
   });
@@ -460,6 +390,12 @@ export default function ChequeTrackerTable({
 
   return (
     <div>
+      <ChequeTrackerDetailsDrawer
+        open={drawerOpen}
+        cheque={selectedCheque}
+        onClose={() => setDrawerOpen(false)}
+      />
+
       {!hideFilters && (
         <Filters
           filters={filters}

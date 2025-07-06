@@ -77,7 +77,7 @@ function LogoWrapper() {
 
 export default function Header() {
   return (
-    <StickyHeader className="z-[990] bg-primary text-white h-[80px]  flex items-center justify-between shadow-md border-b-2 border-tertiary">
+    <StickyHeader className="z-[990] bg-primary text-white h-[80px]  flex items-center justify-between shadow-md border-b-4 border-tertiary">
       <div className="flex items-center gap-8">
         <div className="-ml-4 pr-2">
           {/* <Link href="/" aria-label="Site Logo" className="shrink-0">

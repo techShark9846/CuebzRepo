@@ -7,7 +7,7 @@ export type TaskType = {
     full_name: string; // Employee's full name
     email: string; // Employee's email address
   } | null; // Employee assigned to the task
-  priority: "High" | "Medium" | "Low"; // Priority of the task
+  priority: "High" | "Medium" | "Low" | "Urgent"; // Priority of the task
   dueDate: string; // Due date of the task (ISO 8601 string)
   status: "Pending" | "In Progress" | "Completed"; // Task status
   createdBy: {

@@ -20,6 +20,10 @@
     "starter:build": "turbo build --filter=starter",
     "starter:start": "turbo start --filter=starter",
     "starter:clean": "turbo clean --filter=starter",
+    "starter:build:uat": "cross-env NODE_ENV=uat turbo build --filter=starter",
+    "starter:start:uat": "cross-env NODE_ENV=uat turbo start --filter=starter",
+    "starter:build:prod": "cross-env NODE_ENV=production turbo build --filter=starter",
+    "starter:start:prod": "cross-env NODE_ENV=production turbo start --filter=starter",
     "dnd:dev": "turbo dev --filter=dnd",
     "dnd:lint": "turbo lint --filter=dnd",
     "dnd:build": "turbo build --filter=dnd",
@@ -44,5 +48,8 @@
   "packageManager": "pnpm@9.1.4",
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3"
   }
 }

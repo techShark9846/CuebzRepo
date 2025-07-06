@@ -303,7 +303,8 @@ export default function VendorForm({ filePreviews, setFilePreviews }: any) {
             {errors.attachments.message?.toString()}
           </p>
         )}
-        {renderMultipleFilePreviews(filePreviews.attachments, "attachments")}
+        {filePreviews?.attachments &&
+          renderMultipleFilePreviews(filePreviews.attachments, "attachments")}
       </div>
     </div>
   );
