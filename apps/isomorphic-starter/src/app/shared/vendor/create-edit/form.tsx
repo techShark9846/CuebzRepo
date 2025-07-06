@@ -290,7 +290,7 @@ export default function VendorForm({ filePreviews, setFilePreviews }: any) {
       <hr className="my-8 border-gray-300" />
 
       <h3 className="text-lg font-semibold mb-4">Attachments</h3>
-      {/* <div>
+      <div>
         <Upload
           accept="imgAndPdf"
           placeholderText="Upload attachments"
@@ -305,7 +305,7 @@ export default function VendorForm({ filePreviews, setFilePreviews }: any) {
         )}
         {filePreviews?.attachments &&
           renderMultipleFilePreviews(filePreviews.attachments, "attachments")}
-      </div> */}
+      </div>
     </div>
   );
 }
