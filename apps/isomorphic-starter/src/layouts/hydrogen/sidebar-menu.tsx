@@ -641,8 +641,9 @@ export function SidebarMenu({
                       {item.name}
                     </span>
                     {item.badge?.length ? (
-                      <StatusBadge status={item.badge} />
-                    ) : null}
+                      <></>
+                    ) : // <StatusBadge status={item.badge} />
+                    null}
                   </Link>
                 )}
               </>
