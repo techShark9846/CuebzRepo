@@ -22,12 +22,13 @@ module.exports = {
     ],
   },
   transpilePackages: ["core"],
-  // async rewrites() {
-  //   return [
-  //     {
-  //       source: "/api/:path*",
-  //       destination: "https://admin-assistance-api.onrender.com/:path*", // API URL without `/api`
-  //     },
-  //   ];
-  // },
 };
+
+// async rewrites() {
+//   return [
+//     {
+//       source: "/api/:path*",
+//       destination: "https://admin-assistance-api.onrender.com/:path*", // API URL without `/api`
+//     },
+//   ];
+// },
