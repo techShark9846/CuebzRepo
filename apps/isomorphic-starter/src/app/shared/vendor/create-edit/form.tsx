@@ -47,11 +47,10 @@ export default function VendorForm({ filePreviews, setFilePreviews }: any) {
   ) => {
     const fileList = event.target.files;
     if (fileList && fileList.length > 0) {
-      const newFiles: any = [];
-      // Array.from(fileList).map((file) => ({
-      //   file_name: file.name,
-      //   file_url: URL.createObjectURL(file),
-      // }));
+      const newFiles = Array.from(fileList).map((file) => ({
+        file_name: file.name,
+        file_url: URL.createObjectURL(file),
+      }));
       setValue(name, [...(watch(name) || []), ...newFiles]);
       setFilePreviews((prev: any) => ({
         ...prev,
@@ -291,7 +290,7 @@ export default function VendorForm({ filePreviews, setFilePreviews }: any) {
       <hr className="my-8 border-gray-300" />
 
       <h3 className="text-lg font-semibold mb-4">Attachments</h3>
-      <div>
+      {/* <div>
         <Upload
           accept="imgAndPdf"
           placeholderText="Upload attachments"
@@ -306,7 +305,7 @@ export default function VendorForm({ filePreviews, setFilePreviews }: any) {
         )}
         {filePreviews?.attachments &&
           renderMultipleFilePreviews(filePreviews.attachments, "attachments")}
-      </div>
+      </div> */}
     </div>
   );
 }
