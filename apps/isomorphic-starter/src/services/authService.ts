@@ -123,6 +123,7 @@ const authService = {
     } finally {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
+      Cookies.remove("accessToken");
       store.set(currentUserAtom, null);
     }
   },
