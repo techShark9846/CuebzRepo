@@ -89,71 +89,69 @@
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 
-// Create an Axios instance
-console.log(process.env.NEXT_PUBLIC_BASE_URL, "enviirr");
+// Create Axios instance
 const axiosClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
-  // process.env.NEXT_PUBLIC_API_URL || process.env.NODE_ENV === "development"
-  //   ? "http://localhost:5000/api"
-  //   : "https://api.spydotechnologies.com/api", // API base URL
-  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Interceptor: Request
+// Request Interceptor: Add Authorization Header
 axiosClient.interceptors.request.use(
   (config) => {
-    // Modify request config if needed
+    const accessToken =
+      typeof window !== "undefined"
+        ? localStorage.getItem("accessToken")
+        : null;
+
+    if (accessToken && config.headers) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+
     return config;
   },
   (error) => Promise.reject(error)
 );
 
+// Response Interceptor: Handle Errors
 axiosClient.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
     const responseData: any = error.response?.data;
 
-    // Handle 401 Unauthorized globally
+    // Handle 401 Unauthorized Globally
     if (error.response?.status === 401 || error.response?.status === 403) {
-      // Clear session cookie
-      document.cookie =
-        "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
-      const publicRoutes = ["/signin", "/register", "/otp", "/set-password"];
-
+      // Clear localStorage tokens
       if (typeof window !== "undefined") {
-        const currentRoute = window.location.pathname; // Get the current path without query params
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+
+        const publicRoutes = ["/signin", "/register", "/otp", "/set-password"];
+        const currentRoute = window.location.pathname;
         const isPublicRoute = publicRoutes.some((route) =>
           currentRoute.includes(route)
-        ); // Check if the current route includes any public routes
+        );
 
-        if ((error.response.data as any).subscription_error) {
-          if (window.location.pathname !== "/tenant/expired") {
+        // Subscription expired case
+        if (responseData?.subscription_error) {
+          if (currentRoute !== "/tenant/expired") {
             window.location.href = "/tenant/expired";
           }
         } else if (!isPublicRoute) {
-          // Redirect to the default public route (e.g., /signin) if not on a public route
           window.location.href = "/signin";
         }
       }
     }
 
-    // Handle Scenario 1: Validation Errors
+    // Show validation errors
     if (responseData?.errors && Array.isArray(responseData.errors)) {
-      responseData.errors.forEach((err: any) => {
-        toast.error(err.msg || "Validation error occurred.");
-      });
+      responseData.errors.forEach((err: any) =>
+        toast.error(err.msg || "Validation error occurred.")
+      );
     }
 
-    // Handle Scenario 2: General Error with a Message
-    if (responseData?.message) {
-      toast.error(responseData.message);
-    }
-
-    // Handle other specific status codes or provide a general fallback
+    // General errors
     const message = responseData?.message || responseData?.error;
     if (message) {
       toast.error(message);
@@ -164,3 +162,7 @@ axiosClient.interceptors.response.use(
 );
 
 export default axiosClient;
+
+// process.env.NEXT_PUBLIC_API_URL || process.env.NODE_ENV === "development"
+//   ? "http://localhost:5000/api"
+//   : "https://api.spydotechnologies.com/api", // API base URL

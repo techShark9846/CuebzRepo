@@ -47,7 +47,7 @@ export default function SignInForm() {
         // Redirect to dashboard
         router.replace("/dashboard");
 
-        // window.location.reload();
+        window.location.reload();
       }
     } catch (error: any) {
       console.log("Login Error:", error.message);

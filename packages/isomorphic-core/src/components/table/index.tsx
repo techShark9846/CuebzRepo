@@ -362,7 +362,7 @@
 import { isEmpty } from "lodash";
 import { Fragment } from "react";
 import cn from "@core/utils/class-names";
-import { Box, Empty, Loader, Table, Text, Title } from "rizzui";
+import { Box, Empty, Loader, Table, Text, Title, Button } from "rizzui";
 import { getColumnOptions } from "./util";
 import { flexRender } from "@tanstack/react-table";
 import { useScrollPosition } from "@core/hooks/use-Scroll-position";

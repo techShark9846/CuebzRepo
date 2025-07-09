@@ -1,10 +1,11 @@
 import axiosClient from "./axiosClient";
 import { WritableAtom, getDefaultStore } from "jotai";
-import { currentUserAtom, authLoadingAtom } from "@/store/authAtom";
+import { currentUserAtom } from "@/store/authAtom";
+import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie";
 
 const store = getDefaultStore();
 
-// Define types for authentication
 interface LoginRequest {
   email: string;
   password: string;
@@ -15,7 +16,7 @@ interface RegisterTenantRequest {
   email: string;
   password: string;
   company_name: string;
-  employees_count: string; // Enum-like type for employees count
+  employees_count: string;
   business_category: string;
 }
 
@@ -24,100 +25,105 @@ interface otpRequest {
   otp: string;
 }
 
-interface User {
-  id: string;
-  username: string;
+interface JwtPayload {
+  sub: string;
+  tid?: string;
   role: string;
+  exp: number;
 }
 
 const authService = {
-  // Login user and update global state
   login: async (data: LoginRequest) => {
     try {
       const response = await axiosClient.post("/auth/super-admin/login", data);
-      store.set(currentUserAtom, response.data.user); // Update Jotai state
-      return response.data;
+      const { accessToken, refreshToken, user } = response.data;
+
+      // Store in localStorage (optional)
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+
+      // ✅ Store in cookie for middleware access
+      Cookies.set("accessToken", accessToken, {
+        expires: 7, // days
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "Lax",
+        path: "/",
+      });
+
+      store.set(currentUserAtom, user);
+      return user;
     } catch (error: any) {
-      console.error("Login Error:", error.message || "Login failed.");
-      throw new Error(error.message || "Login failed. Please try again.");
+      throw new Error(error.response?.data?.error || "Login failed.");
     }
   },
-
   registerTenant: async (data: RegisterTenantRequest) => {
-    try {
-      const response = await axiosClient.post(
-        "/auth/tenant-owner/register",
-        data
-      );
-      store.set(currentUserAtom, response.data.user); // Update Jotai state
-      return response.data;
-    } catch (error: any) {
-      console.error("Login Error:", error.message || "Login failed.");
-      throw new Error(error.message || "Register failed. Please try again.");
-    }
+    const response = await axiosClient.post(
+      "/auth/tenant-owner/register",
+      data
+    );
+    return response.data;
   },
+
   verifyOtp: async (data: otpRequest) => {
-    try {
-      const response = await axiosClient.post(
-        "/auth/tenant-owner/verify-otp",
-        data
-      );
-      store.set(currentUserAtom, response.data.user); // Update Jotai state
-      return response.data;
-    } catch (error: any) {
-      throw new Error(error.message || "OTP failed. Please try again.");
-    }
+    const response = await axiosClient.post(
+      "/auth/tenant-owner/verify-otp",
+      data
+    );
+    const { accessToken, refreshToken, user } = response.data;
+
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshToken", refreshToken);
+
+    store.set(currentUserAtom, user);
+    return user;
   },
-
-  // Get the currently authenticated user and update global state
-  // getCurrentUser: async (): Promise<User> => {
-  //   store.set(authLoadingAtom, true);
-  //   try {
-  //     const response = await axiosClient.get("/auth/profile", {
-  //       withCredentials: true,
-  //     });
-  //     const user = response.data.data;
-  //     console.log(user, "heyya");
-
-  //     // Update global state
-  //     store.set(currentUserAtom, user);
-  //     return user;
-  //   } catch (error) {
-  //     store.set(currentUserAtom, null);
-  //     throw error;
-  //   } finally {
-  //     store.set(authLoadingAtom, false);
-  //   }
-  // },
-
-  cachedProfile: null,
 
   getCurrentUser: async () => {
-    if (authService.cachedProfile) {
-      return authService.cachedProfile; // Return cached profile if available
+    const accessToken = localStorage.getItem("accessToken");
+
+    if (!accessToken) {
+      store.set(currentUserAtom, null);
+      return null;
     }
 
     try {
+      const decoded: JwtPayload = jwtDecode(accessToken);
+
+      const now = Date.now() / 1000;
+      if (decoded.exp < now) {
+        throw new Error("Token expired");
+      }
+
       const response = await axiosClient.get("/auth/profile", {
-        withCredentials: true,
+        headers: { Authorization: `Bearer ${accessToken}` },
       });
-      authService.cachedProfile = response.data.data; // Cache the profile
-      store.set(currentUserAtom, authService.cachedProfile); // Update Jotai atom
-      return authService.cachedProfile;
+
+      const user = response.data.data;
+      store.set(currentUserAtom, user);
+      return user;
     } catch (error) {
-      store.set(currentUserAtom, null);
+      authService.logout(); // clear localStorage and state if invalid
       throw error;
     }
   },
 
-  // Logout
   logout: async () => {
     try {
-      await axiosClient.post("/auth/logout");
-      store.set(currentUserAtom, null); // Clear global state
-    } catch (error: any) {
-      console.error("Logout failed:", error.message || "Unexpected error.");
-      throw new Error("Failed to logout. Please try again.");
+      await axiosClient.post(
+        "/auth/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+    } catch (e) {
+      console.warn("Logout failed silently.");
+    } finally {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      store.set(currentUserAtom, null);
     }
   },
 };

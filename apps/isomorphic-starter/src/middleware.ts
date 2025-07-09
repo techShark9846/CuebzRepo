@@ -112,7 +112,7 @@ export default async function middleware(req: NextRequest) {
 
   // Retrieve session cookie
 
-  const sessionCookie = req.cookies.get("session")?.value;
+  const sessionCookie = req.cookies.get("accessToken")?.value;
   console.log(sessionCookie, "cookies");
 
   if (!sessionCookie) {
@@ -134,11 +134,12 @@ export default async function middleware(req: NextRequest) {
     const apiResponse = await fetch(`${BASE_URL}/auth/profile`, {
       credentials: "include",
       headers: {
-        Cookie: `session=${sessionCookie}`,
+        authorization: `Bearer ${sessionCookie}`,
       },
     });
 
     if (apiResponse.ok) {
+      console.log("hiyyeedddd hereee");
       const res = await apiResponse.json();
       currentUser = res.data;
       console.log(res.data, "helloo");

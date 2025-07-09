@@ -18,7 +18,7 @@ import sharedConfig from "tailwind-config";
 const config: Config = {
   content: [
     "./src/**/*.tsx",
-    "./node_modules/rizzui/dist/*.{js,ts,jsx,tsx}",
+    "../../node_modules/rizzui/dist/*.{js,ts,jsx,tsx}",
     "../../packages/isomorphic-core/src/**/*.{js,ts,jsx,tsx}",
   ],
   presets: [sharedConfig],
