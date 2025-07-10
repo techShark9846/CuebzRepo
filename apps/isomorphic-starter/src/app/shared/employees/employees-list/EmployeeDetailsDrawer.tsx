@@ -215,23 +215,23 @@
 //     ? dayjs(date).format("DD-MMM-YYYY")
 //     : "N/A";
 // }
-
 "use client";
 
 import { useEffect, useState } from "react";
 import { Drawer, Button, Text } from "rizzui";
-import { MdClose, MdEdit } from "react-icons/md";
+import { MdClose, MdEdit, MdDelete } from "react-icons/md";
 import dayjs from "dayjs";
+import toast from "react-hot-toast";
+import { FormProvider, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import DeleteConfirmModal from "@core/components/DeleteConfirmModal";
 import FormFooter from "@core/components/form-footer";
 import WidgetCard from "@core/components/cards/widget-card";
-import { FormProvider, useForm } from "react-hook-form";
-import { employeeSchema, EmployeeSchema } from "@/validators/employee.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import employeeService from "@/services/employeeService";
-import toast from "react-hot-toast";
 import EmployeeForm from "../create-edit/form";
 import { defaultValues } from "../create-edit/form-utils";
+import employeeService from "@/services/employeeService";
+import { employeeSchema, EmployeeSchema } from "@/validators/employee.schema";
 
 export default function EmployeeDetailsDrawer({
   employee,
@@ -248,6 +248,7 @@ export default function EmployeeDetailsDrawer({
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [filePreviews, setFilePreviews] = useState<
     Record<string, File | string | null>
   >({
@@ -284,16 +285,27 @@ export default function EmployeeDetailsDrawer({
       setIsEditing(false);
       onUpdated?.();
       onClose();
-    } catch (err) {
+    } catch {
       toast.error("Failed to update employee.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleCloseDrawer = () => {
-    setIsEditing(false);
-    onClose();
+  const handleDelete = async () => {
+    try {
+      toast.loading("Deleting employee...");
+      await employeeService.delete(employee._id);
+      toast.dismiss();
+      toast.success(`Employee ${employee.full_name} deleted successfully.`);
+      setDeleteOpen(false);
+      onDeleted?.();
+      onClose();
+      onUpdated?.();
+    } catch {
+      toast.dismiss();
+      toast.error("Failed to delete employee.");
+    }
   };
 
   return (
@@ -301,14 +313,14 @@ export default function EmployeeDetailsDrawer({
       isOpen={open}
       onClose={onClose}
       overlayClassName="backdrop-blur"
-      containerClassName="!max-w-[calc(100%-480px)] !shadow-2xl z-[999]"
+      containerClassName="w-full sm:!max-w-[calc(100%-480px)] !shadow-2xl z-[999]"
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 p-4 border-b border-gray-200 dark:border-gray-700">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
           Employee Details
         </h2>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 sm:justify-end">
           {isEditing ? (
             <Button
               size="sm"
@@ -323,16 +335,32 @@ export default function EmployeeDetailsDrawer({
               variant="outline"
               onClick={() => setIsEditing(true)}
             >
-              <MdEdit className="me-1" /> Edit
+              <MdEdit className="me-1" />
+              Edit
             </Button>
           )}
+
+          <DeleteConfirmModal
+            isOpen={deleteOpen}
+            onClose={() => setDeleteOpen(false)}
+            onConfirm={handleDelete}
+            loading={isLoading}
+            title="Delete Employee"
+            description={`Are you sure you want to delete ${employee.full_name}?`}
+          />
+
           <Button
             size="sm"
-            color="danger"
             variant="outline"
-            onClick={handleCloseDrawer}
+            onClick={() => setDeleteOpen(true)}
           >
+            <MdDelete className="me-1" />
+            Delete
+          </Button>
+
+          <Button size="sm" variant="outline" onClick={onClose}>
             <MdClose className="w-5 h-5" />
+            Close
           </Button>
         </div>
       </div>
@@ -450,6 +478,7 @@ export default function EmployeeDetailsDrawer({
                 ]}
               />
             </WidgetCard>
+
             {employee.emergency_contact_info && (
               <WidgetCard title="Emergency Contact Info">
                 <br />
@@ -474,7 +503,6 @@ export default function EmployeeDetailsDrawer({
 
             {employee.comments && (
               <WidgetCard title="Comments">
-                <br />
                 <Text className="text-sm text-gray-700 whitespace-pre-line">
                   {employee.comments}
                 </Text>
@@ -490,7 +518,7 @@ export default function EmployeeDetailsDrawer({
 function InfoGrid({
   items,
 }: {
-  items: { label: string; value?: string | number }[];
+  items: { label: string; value?: string | number | JSX.Element }[];
 }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -498,7 +526,9 @@ function InfoGrid({
         <div key={label} className="text-sm">
           <p className="text-gray-500 font-medium text-xs mb-1">{label}</p>
           <p className="text-gray-900 font-semibold break-words">
-            {value ?? "N/A"}
+            {typeof value === "string" || typeof value === "number"
+              ? value || "N/A"
+              : value}
           </p>
         </div>
       ))}

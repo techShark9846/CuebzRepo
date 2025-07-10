@@ -392,7 +392,7 @@ export default function TaskTable({
       {
         accessorKey: "assignedTo",
         header: "Assigned To",
-        cell: ({ row }: any) => row.original.assignedTo.full_name || "N/A",
+        cell: ({ row }: any) => row.original?.assignedTo?.full_name || "N/A",
       },
       {
         accessorKey: "priority",

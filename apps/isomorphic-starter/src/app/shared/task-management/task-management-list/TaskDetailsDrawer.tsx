@@ -182,7 +182,7 @@
 
 import { useState, useEffect } from "react";
 import { Drawer, Button, Text } from "rizzui";
-import { MdClose, MdEdit } from "react-icons/md";
+import { MdClose, MdEdit, MdDelete } from "react-icons/md";
 import toast from "react-hot-toast";
 import TaskForm from "../create-edit/form";
 import { FormProvider, useForm } from "react-hook-form";
@@ -195,6 +195,7 @@ import taskService from "@/services/taskManagementService";
 import FormFooter from "@core/components/form-footer";
 import dayjs from "dayjs";
 import WidgetCard from "@core/components/cards/widget-card";
+import DeleteConfirmModal from "@core/components/DeleteConfirmModal";
 
 export default function TaskDetailsDrawer({
   task,
@@ -209,6 +210,7 @@ export default function TaskDetailsDrawer({
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [filePreviews, setFilePreviews] = useState<
     Record<string, File[] | string[]>
   >({
@@ -222,7 +224,6 @@ export default function TaskDetailsDrawer({
 
   useEffect(() => {
     if (task) {
-      console.log(task);
       methods.reset({ ...task, assignedTo: task?.assignedTo?._id });
       setFilePreviews({
         attachments: task.attachments || [],
@@ -249,19 +250,34 @@ export default function TaskDetailsDrawer({
     onClose();
   };
 
+  const handleDelete = async () => {
+    try {
+      toast.loading("Deleting task...");
+      await taskService.delete(task._id);
+      toast.dismiss();
+      toast.success(`Task ${task.title} deleted successfully.`);
+      setDeleteOpen(false);
+      onClose();
+      onUpdated?.();
+    } catch {
+      toast.dismiss();
+      toast.error("Failed to delete task.");
+    }
+  };
+
   return (
     <Drawer
       isOpen={open}
       onClose={onClose}
       overlayClassName="backdrop-blur"
-      containerClassName="!max-w-[calc(100%-480px)] !shadow-2xl z-[999]"
+      containerClassName="w-full sm:!max-w-[calc(100%-480px)] !shadow-2xl z-[999]"
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 p-4 border-b border-gray-200 dark:border-gray-700">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
           Task Details
         </h2>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 sm:justify-end">
           {isEditing ? (
             <Button
               size="sm"
@@ -279,13 +295,26 @@ export default function TaskDetailsDrawer({
               <MdEdit className="me-1" /> Edit
             </Button>
           )}
+
+          <DeleteConfirmModal
+            isOpen={deleteOpen}
+            onClose={() => setDeleteOpen(false)}
+            onConfirm={handleDelete}
+            loading={isLoading}
+            title="Delete Task"
+            description={`Are you sure you want to delete ${task.title}?`}
+          />
+
           <Button
             size="sm"
-            color="danger"
             variant="outline"
-            onClick={handleCloseDrawer}
+            onClick={() => setDeleteOpen(true)}
           >
-            <MdClose className="w-5 h-5" />
+            <MdDelete className="me-1" /> Delete
+          </Button>
+
+          <Button size="sm" variant="outline" onClick={handleCloseDrawer}>
+            <MdClose className="w-5 h-5" /> Close
           </Button>
         </div>
       </div>
@@ -328,7 +357,6 @@ export default function TaskDetailsDrawer({
             </WidgetCard>
 
             <WidgetCard title="Description">
-              <br />
               <Text className="text-sm text-gray-700 whitespace-pre-line">
                 {task.description || "No description provided."}
               </Text>
@@ -336,7 +364,6 @@ export default function TaskDetailsDrawer({
 
             {task.comments && (
               <WidgetCard title="Comments">
-                <br />
                 <Text className="text-sm text-gray-700 whitespace-pre-line">
                   {task.comments}
                 </Text>
@@ -345,7 +372,6 @@ export default function TaskDetailsDrawer({
 
             {Array.isArray(task.attachments) && task.attachments.length > 0 && (
               <WidgetCard title="Attachments">
-                <br />
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {task.attachments.map((attachment: string, index: number) => {
                     const isImage = /\.(jpg|jpeg|png|gif)$/i.test(attachment);
