@@ -85,40 +85,157 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import cn from "@core/utils/class-names";
 import SimpleBar from "@core/ui/simplebar";
 import { SidebarMenu } from "./sidebar-menu";
 import { RxHamburgerMenu } from "react-icons/rx";
 
-export default function Sidebar({ className }: { className?: string }) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+export default function Sidebar({
+  isMobileOpen,
+  toggleSidebar,
+  isCollapsed,
+  toggleCollapse,
+}: {
+  isMobileOpen: boolean;
+  toggleSidebar: () => void;
+  isCollapsed: boolean;
+  toggleCollapse: () => void;
+}) {
+  useEffect(() => {
+    const closeSidebarOnResize = () => {
+      if (window.innerWidth >= 1280) {
+        toggleSidebar(); // auto-close on desktop resize
+      }
+    };
+    window.addEventListener("resize", closeSidebarOnResize);
+    return () => window.removeEventListener("resize", closeSidebarOnResize);
+  }, []);
 
   return (
-    <aside
-      className={cn(
-        "bottom-0 start-0 z-50 h-full w-[270px] bg-white shadow-2xl transition-all duration-200 fixed hidden xl:block dark:bg-gray-50",
-        isCollapsed && "w-[70px]",
-        className
-      )}
-    >
-      <SimpleBar className="h-[calc(100%-60px)] mt-20">
-        {/* Hamburger Toggle */}
-        <div className="flex items-center justify-end px-4 py-3 border-b border-gray-200">
+    <>
+      {/* Mobile Hamburger Button */}
+      <button
+        className="lg:hidden fixed top-4 left-4 z-[300] text-gray-700 bg-white dark:bg-gray-800 p-2 rounded-md shadow-md"
+        onClick={toggleSidebar}
+        aria-label="Toggle Sidebar"
+      >
+        <RxHamburgerMenu className="h-6 w-6" />
+      </button>
+
+      {/* Sidebar */}
+      <aside
+        className={cn(
+          "fixed top-5 left-0 z-100 h-full bg-white dark:bg-gray-50 shadow-xl transition-all duration-300 ",
+          isMobileOpen
+            ? "translate-x-0 w-[270px]"
+            : "translate-x-[-100%] lg:translate-x-0",
+          isCollapsed ? "lg:w-[70px]" : "lg:w-[270px]"
+        )}
+      >
+        {/* Collapse Toggle */}
+        <div className="hidden lg:flex items-center justify-end px-4 py-3 border-b border-gray-200 mt-16">
           <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
+            onClick={toggleCollapse}
             className="text-gray-600 hover:text-gray-900"
-            aria-label="Toggle Sidebar"
           >
             <RxHamburgerMenu className="h-5 w-5" />
           </button>
         </div>
-        <SidebarMenu isCollapsed={isCollapsed} />
-      </SimpleBar>
-    </aside>
+
+        <SimpleBar className="h-[calc(100%-60px)] mt-16 lg:mt-0 lg:z-[400]">
+          <SidebarMenu isCollapsed={isCollapsed} />
+        </SimpleBar>
+      </aside>
+
+      {/* Mobile Backdrop */}
+      {/* {isMobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-[200] xl:hidden"
+          onClick={toggleSidebar}
+        />
+      )} */}
+    </>
   );
 }
 
+// "use client";
+
+// import { useState, useEffect } from "react";
+// import cn from "@core/utils/class-names";
+// import SimpleBar from "@core/ui/simplebar";
+// import { SidebarMenu } from "./sidebar-menu";
+// import { RxHamburgerMenu } from "react-icons/rx";
+
+// export default function Sidebar({ className }: { className?: string }) {
+//   const [isCollapsed, setIsCollapsed] = useState(false);
+//   const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+//   const toggleSidebar = () => {
+//     if (window.innerWidth < 1280) {
+//       setIsMobileOpen(!isMobileOpen);
+//     } else {
+//       setIsCollapsed(!isCollapsed);
+//     }
+//   };
+
+//   // Close sidebar on route change (optional improvement)
+//   useEffect(() => {
+//     const closeSidebarOnResize = () => {
+//       if (window.innerWidth >= 1280) {
+//         setIsMobileOpen(false);
+//       }
+//     };
+//     window.addEventListener("resize", closeSidebarOnResize);
+//     return () => window.removeEventListener("resize", closeSidebarOnResize);
+//   }, []);
+
+//   return (
+//     <>
+//       {/* Mobile Hamburger Button */}
+//       <button
+//         className="xl:hidden fixed top-4 left-4 z-[110] text-gray-700 dark:text-white bg-white p-1 rounded-md shadow-md"
+//         onClick={toggleSidebar}
+//       >
+//         <RxHamburgerMenu className="h-6 w-6" />
+//       </button>
+
+//       {/* Sidebar Drawer */}
+//       <aside
+//         className={cn(
+//           "fixed top-0 left-0 z-50 h-full bg-white shadow-2xl transition-all duration-300 dark:bg-gray-50",
+//           "w-[270px]",
+//           isCollapsed && "xl:w-[70px] hidden xl:block",
+//           isMobileOpen ? "block" : "hidden",
+//           "xl:block",
+//           className
+//         )}
+//       >
+//         {/* Desktop Collapse Button */}
+//         <div className="hidden xl:flex items-center justify-end px-4 py-3 border-b border-gray-200 mt-20">
+//           <button
+//             onClick={toggleSidebar}
+//             className="text-gray-600 hover:text-gray-900"
+//           >
+//             <RxHamburgerMenu className="h-5 w-5" />
+//           </button>
+//         </div>
+
+//         <SimpleBar className="h-[calc(100%-60px)]">
+//           <SidebarMenu isCollapsed={isCollapsed} />
+//         </SimpleBar>
+//       </aside>
+
+//       {/* Mobile Backdrop */}
+//       {isMobileOpen && (
+//         <div
+//           className="fixed inset-0 bg-black/40 z-40 xl:hidden"
+//           onClick={() => setIsMobileOpen(false)}
+//         />
+//       )}
+//     </>
+//   );
+// }
 {
   /* <div className="sticky top-0 z-40 bg-gray-0/10 px-6 dark:bg-gray-100/5 2xl:px-8 2xl:pt-6">
         <Link
