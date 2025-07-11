@@ -86,10 +86,10 @@
 //     ? "http://localhost:5000/api"
 //     : "https://admin-assistance-api.onrender.com/api", // API base URL
 
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import toast from "react-hot-toast";
+import Cookies from "js-cookie";
 
-// Create Axios instance
 const axiosClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
   headers: {
@@ -97,13 +97,28 @@ const axiosClient = axios.create({
   },
 });
 
-// Request Interceptor: Add Authorization Header
+// Prevent multiple refresh attempts
+let isRefreshing = false;
+let failedQueue: {
+  resolve: (token: string) => void;
+  reject: (error: any) => void;
+}[] = [];
+
+const processQueue = (error: any, token: string | null = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token!);
+    }
+  });
+  failedQueue = [];
+};
+
+// Attach access token to each request
 axiosClient.interceptors.request.use(
   (config) => {
-    const accessToken =
-      typeof window !== "undefined"
-        ? localStorage.getItem("accessToken")
-        : null;
+    const accessToken = Cookies.get("accessToken");
 
     if (accessToken && config.headers) {
       config.headers.Authorization = `Bearer ${accessToken}`;
@@ -114,33 +129,82 @@ axiosClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response Interceptor: Handle Errors
+// Handle 401/403 errors globally and refresh token if needed
 axiosClient.interceptors.response.use(
   (response) => response,
-  (error: AxiosError) => {
+  async (error: AxiosError & { config: any }) => {
+    const originalRequest = error.config;
     const responseData: any = error.response?.data;
 
-    // Handle 401 Unauthorized Globally
-    if (error.response?.status === 401 || error.response?.status === 403) {
-      // Clear localStorage tokens
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
+    if (
+      (error.response?.status === 401 || error.response?.status === 403) &&
+      !originalRequest._retry
+    ) {
+      originalRequest._retry = true;
 
-        const publicRoutes = ["/signin", "/register", "/otp", "/set-password"];
-        const currentRoute = window.location.pathname;
-        const isPublicRoute = publicRoutes.some((route) =>
-          currentRoute.includes(route)
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({
+            resolve: (token: string) => {
+              originalRequest.headers["Authorization"] = `Bearer ${token}`;
+              resolve(axiosClient(originalRequest));
+            },
+            reject: (err) => reject(err),
+          });
+        });
+      }
+
+      isRefreshing = true;
+
+      try {
+        const refreshToken = Cookies.get("refreshToken");
+
+        const { data } = await axios.post(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/auth/refresh`,
+          { refreshToken }
         );
 
-        // Subscription expired case
-        if (responseData?.subscription_error) {
-          if (currentRoute !== "/tenant/expired") {
-            window.location.href = "/tenant/expired";
+        const newAccessToken = data.accessToken;
+
+        // ✅ Store new access token in cookie
+        Cookies.set("accessToken", newAccessToken, {
+          expires: 7,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "Lax",
+          path: "/",
+        });
+
+        processQueue(null, newAccessToken);
+
+        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+        return axiosClient(originalRequest);
+      } catch (err) {
+        processQueue(err, null);
+
+        Cookies.remove("accessToken");
+        Cookies.remove("refreshToken");
+
+        if (typeof window !== "undefined") {
+          const publicRoutes = [
+            "/signin",
+            "/register",
+            "/otp",
+            "/set-password",
+          ];
+          const currentRoute = window.location.pathname;
+
+          if (responseData?.subscription_error) {
+            if (currentRoute !== "/tenant/expired") {
+              window.location.href = "/tenant/expired";
+            }
+          } else if (!publicRoutes.some((r) => currentRoute.includes(r))) {
+            window.location.href = "/signin";
           }
-        } else if (!isPublicRoute) {
-          window.location.href = "/signin";
         }
+
+        return Promise.reject(err);
+      } finally {
+        isRefreshing = false;
       }
     }
 
@@ -151,11 +215,9 @@ axiosClient.interceptors.response.use(
       );
     }
 
-    // General errors
+    // General error
     const message = responseData?.message || responseData?.error;
-    if (message) {
-      toast.error(message);
-    }
+    if (message) toast.error(message);
 
     return Promise.reject({ ...error, message });
   }
