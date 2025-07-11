@@ -226,7 +226,13 @@ export default function Filters({
   return (
     <Flex align="center" justify="between" className="mb-4">
       {/* Global Search */}
-      <div className="mt-4 flex items-center gap-3">
+      <div className="flex items-center gap-3">
+        <Link href={routesTenant.employees.createEmployeeRecord}>
+          <Button>
+            <PiPlusBold className="me-1.5 size-[17px]" />
+            Add Employee
+          </Button>
+        </Link>
         <Input
           type="search"
           placeholder="Search by employee name..."
@@ -240,16 +246,10 @@ export default function Filters({
               globalSearch: e.target.value,
             }))
           }
-          inputClassName="h-9"
+          inputClassName="h-10"
           clearable={true}
           prefix={<PiMagnifyingGlassBold className="size-4" />}
         />
-        <Link href={routesTenant.employees.createEmployeeRecord}>
-          <Button>
-            <PiPlusBold className="me-1.5 size-[17px]" />
-            Add Employee
-          </Button>
-        </Link>
       </div>
 
       {/* Filters Drawer */}

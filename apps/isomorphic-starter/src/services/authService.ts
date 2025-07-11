@@ -173,16 +173,18 @@ const authService = {
       const response = await axiosClient.post("/auth/super-admin/login", data);
       const { accessToken, refreshToken, user } = response.data;
 
+      const accessExpireDate = new Date(new Date().getTime() + 15 * 60 * 1000); // 15 minutes
+
       // ✅ Store both in cookies
       Cookies.set("accessToken", accessToken, {
-        expires: TOKEN_EXPIRE_DAYS,
+        expires: accessExpireDate,
         secure: process.env.NODE_ENV === "production",
         sameSite: "Lax",
         path: "/",
       });
 
       Cookies.set("refreshToken", refreshToken, {
-        expires: TOKEN_EXPIRE_DAYS,
+        expires: 15, // 15 days
         secure: process.env.NODE_ENV === "production",
         sameSite: "Lax",
         path: "/",

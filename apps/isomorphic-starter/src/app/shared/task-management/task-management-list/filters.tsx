@@ -278,6 +278,12 @@ export default function TaskFilters({
       {/* Global Search */}
 
       <div className="flex gap-4">
+        <Link href={routesTenant.employees.createTaskManagementRecord}>
+          <Button>
+            <PiPlusBold className="me-1.5 size-[17px]" />
+            Add Task
+          </Button>
+        </Link>
         <Input
           type="search"
           placeholder="Search by task title or description..."
@@ -291,16 +297,10 @@ export default function TaskFilters({
               globalSearch: e.target.value,
             }))
           }
-          inputClassName="h-9"
+          inputClassName="h-10"
           clearable={true}
           prefix={<PiMagnifyingGlassBold className="size-4" />}
         />
-        <Link href={routesTenant.employees.createTaskManagementRecord}>
-          <Button>
-            <PiPlusBold className="me-1.5 size-[17px]" />
-            Add Task
-          </Button>
-        </Link>
       </div>
 
       {/* Filters Drawer */}

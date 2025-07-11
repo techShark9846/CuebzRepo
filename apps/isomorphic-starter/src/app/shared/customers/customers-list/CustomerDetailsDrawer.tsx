@@ -206,12 +206,13 @@
 
 import { useState, useEffect } from "react";
 import { Drawer, Button, Text } from "rizzui";
-import { MdClose, MdEdit } from "react-icons/md";
+import { MdClose, MdEdit, MdDelete } from "react-icons/md";
 import toast from "react-hot-toast";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import WidgetCard from "@core/components/cards/widget-card";
 import FormFooter from "@core/components/form-footer";
+import DeleteConfirmModal from "@core/components/DeleteConfirmModal";
 import { customerSchema, CustomerSchema } from "@/validators/customer.schema";
 import customerService from "@/services/customerService";
 import CustomerForm from "../create-edit/form";
@@ -230,6 +231,7 @@ export default function CustomerDetailsDrawer({
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const methods = useForm<CustomerSchema>({
     resolver: zodResolver(customerSchema),
@@ -257,9 +259,19 @@ export default function CustomerDetailsDrawer({
     }
   };
 
-  const handleCloseDrawer = () => {
-    setIsEditing(false);
-    onClose();
+  const handleDelete = async () => {
+    try {
+      toast.loading("Deleting customer...");
+      await customerService.delete(customer._id);
+      toast.dismiss();
+      toast.success(`Customer ${customer.full_name} deleted successfully.`);
+      setDeleteOpen(false);
+      onUpdated?.();
+      onClose();
+    } catch {
+      toast.dismiss();
+      toast.error("Failed to delete customer.");
+    }
   };
 
   return (
@@ -267,14 +279,14 @@ export default function CustomerDetailsDrawer({
       isOpen={open}
       onClose={onClose}
       overlayClassName="backdrop-blur"
-      containerClassName="!max-w-[calc(100%-480px)] !shadow-2xl z-[999]"
+      containerClassName="w-full sm:!max-w-[calc(100%-480px)] !shadow-2xl z-[999]"
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 p-4 border-b border-gray-200 dark:border-gray-700">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
           Customer Details
         </h2>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 sm:justify-end">
           {isEditing ? (
             <Button
               size="sm"
@@ -292,13 +304,27 @@ export default function CustomerDetailsDrawer({
               <MdEdit className="me-1" /> Edit
             </Button>
           )}
+
+          <DeleteConfirmModal
+            isOpen={deleteOpen}
+            onClose={() => setDeleteOpen(false)}
+            onConfirm={handleDelete}
+            loading={isLoading}
+            title="Delete Customer"
+            description={`Are you sure you want to delete ${customer.full_name}?`}
+          />
+
           <Button
             size="sm"
-            color="danger"
             variant="outline"
-            onClick={handleCloseDrawer}
+            onClick={() => setDeleteOpen(true)}
           >
+            <MdDelete className="me-1" /> Delete
+          </Button>
+
+          <Button size="sm" variant="outline" onClick={onClose}>
             <MdClose className="w-5 h-5" />
+            Close
           </Button>
         </div>
       </div>

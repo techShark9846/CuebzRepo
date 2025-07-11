@@ -256,7 +256,7 @@ export default function VisitorDetailsDrawer({
       isOpen={open}
       onClose={onClose}
       overlayClassName="backdrop-blur"
-      containerClassName="w-full sm:!max-w-[calc(100%-480px)] !shadow-2xl z-[999]"
+      containerClassName="w-full sm:!max-w-[calc(100%-900px)] !shadow-2xl z-[999]"
     >
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 p-4 border-b border-gray-200 dark:border-gray-700">
@@ -340,9 +340,8 @@ export default function VisitorDetailsDrawer({
             </form>
           </FormProvider>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <WidgetCard title="Visitor Info">
-              <br />
+          <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
+            <WidgetCard>
               <InfoGrid
                 items={[
                   { label: "Visitor Name", value: visitor.visitor_name },

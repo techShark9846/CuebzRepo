@@ -73,7 +73,7 @@ export default function CustomerFilters({
               globalSearch: e.target.value,
             }))
           }
-          inputClassName="h-9"
+          inputClassName="h-10"
           clearable={true}
           prefix={<PiMagnifyingGlassBold className="size-4" />}
         />

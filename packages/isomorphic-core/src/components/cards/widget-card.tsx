@@ -55,12 +55,18 @@ function WidgetCard(
         )}
       >
         <div>
-          <Title
-            as="h3"
-            className={cn("text-base font-semibold sm:text-lg", titleClassName)}
-          >
-            {title}
-          </Title>
+          {title && (
+            <Title
+              as="h3"
+              className={cn(
+                "text-base font-semibold sm:text-lg",
+                titleClassName
+              )}
+            >
+              {title}
+            </Title>
+          )}
+
           {description && (
             <div className={descriptionClassName}>{description}</div>
           )}

@@ -85,7 +85,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import cn from "@core/utils/class-names";
 import SimpleBar from "@core/ui/simplebar";
 import { SidebarMenu } from "./sidebar-menu";
@@ -105,7 +105,7 @@ export default function Sidebar({
   useEffect(() => {
     const closeSidebarOnResize = () => {
       if (window.innerWidth >= 1280) {
-        toggleSidebar(); // auto-close on desktop resize
+        toggleSidebar();
       }
     };
     window.addEventListener("resize", closeSidebarOnResize);
@@ -114,7 +114,6 @@ export default function Sidebar({
 
   return (
     <>
-      {/* Mobile Hamburger Button */}
       <button
         className="lg:hidden fixed top-4 left-4 z-[300] text-gray-700 bg-white dark:bg-gray-800 p-2 rounded-md shadow-md"
         onClick={toggleSidebar}
@@ -123,18 +122,17 @@ export default function Sidebar({
         <RxHamburgerMenu className="h-6 w-6" />
       </button>
 
-      {/* Sidebar */}
       <aside
         className={cn(
-          "fixed top-5 left-0 z-100 h-full bg-white dark:bg-gray-50 shadow-xl transition-all duration-300 ",
+          "fixed top-5 left-0 z-[1] h-full bg-white dark:bg-gray-50 shadow-xl transition-all duration-300 overflow-hidden",
           isMobileOpen
             ? "translate-x-0 w-[270px]"
             : "translate-x-[-100%] lg:translate-x-0",
           isCollapsed ? "lg:w-[70px]" : "lg:w-[270px]"
         )}
       >
-        {/* Collapse Toggle */}
-        <div className="hidden lg:flex items-center justify-end px-4 py-3 border-b border-gray-200 mt-16">
+        {/* {!isCollapsed && ( */}
+        <div className="hidden lg:flex items-center justify-start px-4 py-3 mt-16">
           <button
             onClick={toggleCollapse}
             className="text-gray-600 hover:text-gray-900"
@@ -142,21 +140,26 @@ export default function Sidebar({
             <RxHamburgerMenu className="h-5 w-5" />
           </button>
         </div>
+        {/* )} */}
 
         <SimpleBar className="h-[calc(100%-60px)] mt-16 lg:mt-0 lg:z-[400]">
           <SidebarMenu isCollapsed={isCollapsed} />
         </SimpleBar>
       </aside>
+    </>
+  );
+}
 
-      {/* Mobile Backdrop */}
-      {/* {isMobileOpen && (
+{
+  /* Mobile Backdrop */
+}
+{
+  /* {isMobileOpen && (
         <div
           className="fixed inset-0 bg-black/40 z-[200] xl:hidden"
           onClick={toggleSidebar}
         />
-      )} */}
-    </>
-  );
+      )} */
 }
 
 // "use client";

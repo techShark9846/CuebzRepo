@@ -515,6 +515,155 @@
 //     </div>
 //   );
 // }
+// "use client";
+
+// import Link from "next/link";
+// import { usePathname } from "next/navigation";
+// import { Fragment, useState } from "react";
+// import { Title, Collapse } from "rizzui";
+// import cn from "@core/utils/class-names";
+// import { PiCaretDownBold } from "react-icons/pi";
+// import {
+//   menuItemsSuperAmin,
+//   menuItemsTenant,
+// } from "@/layouts/hydrogen/menu-items";
+// import StatusBadge from "@core/components/get-status-badge";
+// import { useAtom } from "jotai";
+// import { currentUserAtom } from "@/store/authAtom";
+
+// export function SidebarMenu({
+//   isCollapsed = false,
+// }: {
+//   isCollapsed?: boolean;
+// }) {
+//   const pathname = usePathname();
+//   const [currentUser] = useAtom(currentUserAtom);
+//   const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+//   const filterMenuItemsForTenantUser = (items: any[]) => {
+//     if (currentUser?.role !== "tenant-user") return items;
+//     return items
+//       .map((item) => {
+//         if (item?.dropdownItems) {
+//           const filtered = item.dropdownItems.filter((d: any) =>
+//             currentUser?.accessible_modules?.includes(d.key)
+//           );
+//           return filtered.length ? { ...item, dropdownItems: filtered } : null;
+//         }
+//         return currentUser?.accessible_modules?.includes(item.key)
+//           ? item
+//           : null;
+//       })
+//       .filter(Boolean);
+//   };
+
+//   const menuItems =
+//     currentUser?.role === "super-admin"
+//       ? menuItemsSuperAmin
+//       : filterMenuItemsForTenantUser(menuItemsTenant);
+
+//   return (
+//     <div className="px-3">
+//       {menuItems.map((item: any, index: number) => {
+//         const isActive = pathname === item?.href;
+//         const hasChildren = !!item?.dropdownItems;
+//         const isOpen = openIndex === index;
+
+//         return (
+//           <Fragment key={item.name + "-" + index}>
+//             {item?.href ? (
+//               <>
+//                 {hasChildren ? (
+//                   <Collapse
+//                     key={
+//                       openIndex === index ? `open-${index}` : `closed-${index}`
+//                     }
+//                     defaultOpen={openIndex === index}
+//                     header={() => (
+//                       <div
+//                         onClick={() => setOpenIndex(isOpen ? null : index)}
+//                         className={cn(
+//                           "flex items-center justify-between cursor-pointer rounded-md my-1 px-3 py-2 font-medium text-sm transition-colors duration-150",
+//                           isOpen
+//                             ? "bg-yellow-400 text-white"
+//                             : "text-gray-800 hover:bg-gray-100"
+//                         )}
+//                       >
+//                         <span className="flex items-center">
+//                           {item.icon && (
+//                             <span className="me-2 text-lg">{item.icon}</span>
+//                           )}
+//                           {item.name}
+//                         </span>
+//                         <PiCaretDownBold
+//                           className={cn(
+//                             "h-3.5 w-3.5 transition-transform",
+//                             isOpen ? "rotate-0" : "-rotate-90"
+//                           )}
+//                         />
+//                       </div>
+//                     )}
+//                   >
+//                     {item.dropdownItems.map(
+//                       (dropdownItem: any, idx: number) => {
+//                         const isChildActive = pathname === dropdownItem?.href;
+//                         return (
+//                           <Link
+//                             key={dropdownItem.name + idx}
+//                             href={dropdownItem.href}
+//                             className={cn(
+//                               "ml-6 mt-1 block rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150",
+//                               isChildActive
+//                                 ? "text-primary"
+//                                 : "text-gray-600 hover:text-gray-900"
+//                             )}
+//                           >
+//                             {dropdownItem.name}
+//                           </Link>
+//                         );
+//                       }
+//                     )}
+//                   </Collapse>
+//                 ) : (
+//                   <Link
+//                     href={item.href}
+//                     className={cn(
+//                       "flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors duration-150",
+//                       isActive
+//                         ? "bg-yellow-400 text-white"
+//                         : "text-gray-800 hover:bg-gray-100"
+//                     )}
+//                   >
+//                     <span className="flex items-center">
+//                       {item.icon && (
+//                         <span className="me-2 text-lg">{item.icon}</span>
+//                       )}
+//                       {item.name}
+//                     </span>
+//                     {item.badge?.length ? (
+//                       <></>
+//                     ) : // <StatusBadge status={item.badge} />
+//                     null}
+//                   </Link>
+//                 )}
+//               </>
+//             ) : (
+//               <Title
+//                 as="h6"
+//                 className={cn(
+//                   "mt-6 mb-2 px-3 text-xs font-semibold uppercase text-gray-500 tracking-wide"
+//                 )}
+//               >
+//                 {item.name}
+//               </Title>
+//             )}
+//           </Fragment>
+//         );
+//       })}
+//     </div>
+//   );
+// }
+
 "use client";
 
 import Link from "next/link";
@@ -527,7 +676,6 @@ import {
   menuItemsSuperAmin,
   menuItemsTenant,
 } from "@/layouts/hydrogen/menu-items";
-import StatusBadge from "@core/components/get-status-badge";
 import { useAtom } from "jotai";
 import { currentUserAtom } from "@/store/authAtom";
 
@@ -583,24 +731,34 @@ export function SidebarMenu({
                       <div
                         onClick={() => setOpenIndex(isOpen ? null : index)}
                         className={cn(
-                          "flex items-center justify-between cursor-pointer rounded-md my-1 px-3 py-2 font-medium text-sm transition-colors duration-150",
+                          "flex items-center justify-between cursor-pointer rounded-md px-3 py-2 font-medium text-sm transition-colors duration-150 my-2",
                           isOpen
                             ? "bg-yellow-400 text-white"
                             : "text-gray-800 hover:bg-gray-100"
                         )}
+                        title={isCollapsed ? item.name : ""}
                       >
-                        <span className="flex items-center">
-                          {item.icon && (
-                            <span className="me-2 text-lg">{item.icon}</span>
-                          )}
-                          {item.name}
-                        </span>
-                        <PiCaretDownBold
+                        <span
                           className={cn(
-                            "h-3.5 w-3.5 transition-transform",
-                            isOpen ? "rotate-0" : "-rotate-90"
+                            "flex items-center",
+                            isCollapsed && "justify-center w-full"
                           )}
-                        />
+                        >
+                          {item.icon && (
+                            <span className="text-lg">{item.icon}</span>
+                          )}
+                          {!isCollapsed && (
+                            <span className="ms-2">{item.name}</span>
+                          )}
+                        </span>
+                        {!isCollapsed && (
+                          <PiCaretDownBold
+                            className={cn(
+                              "h-3.5 w-3.5 transition-transform",
+                              isOpen ? "rotate-0" : "-rotate-90"
+                            )}
+                          />
+                        )}
                       </div>
                     )}
                   >
@@ -611,6 +769,7 @@ export function SidebarMenu({
                           <Link
                             key={dropdownItem.name + idx}
                             href={dropdownItem.href}
+                            title={isCollapsed ? dropdownItem.name : ""}
                             className={cn(
                               "ml-6 mt-1 block rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150",
                               isChildActive
@@ -618,7 +777,7 @@ export function SidebarMenu({
                                 : "text-gray-600 hover:text-gray-900"
                             )}
                           >
-                            {dropdownItem.name}
+                            {!isCollapsed && dropdownItem.name}
                           </Link>
                         );
                       }
@@ -627,6 +786,7 @@ export function SidebarMenu({
                 ) : (
                   <Link
                     href={item.href}
+                    title={isCollapsed ? item.name : ""}
                     className={cn(
                       "flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors duration-150",
                       isActive
@@ -634,28 +794,33 @@ export function SidebarMenu({
                         : "text-gray-800 hover:bg-gray-100"
                     )}
                   >
-                    <span className="flex items-center">
-                      {item.icon && (
-                        <span className="me-2 text-lg">{item.icon}</span>
+                    <span
+                      className={cn(
+                        "flex items-center",
+                        isCollapsed && "justify-center w-full"
                       )}
-                      {item.name}
+                    >
+                      {item.icon && (
+                        <span className="text-lg">{item.icon}</span>
+                      )}
+                      {!isCollapsed && (
+                        <span className="ms-2">{item.name}</span>
+                      )}
                     </span>
-                    {item.badge?.length ? (
-                      <></>
-                    ) : // <StatusBadge status={item.badge} />
-                    null}
                   </Link>
                 )}
               </>
             ) : (
-              <Title
-                as="h6"
-                className={cn(
-                  "mt-6 mb-2 px-3 text-xs font-semibold uppercase text-gray-500 tracking-wide"
-                )}
-              >
-                {item.name}
-              </Title>
+              !isCollapsed && (
+                <Title
+                  as="h6"
+                  className={cn(
+                    "mt-6 mb-2 px-3 text-xs font-semibold uppercase text-gray-500 tracking-wide"
+                  )}
+                >
+                  {item.name}
+                </Title>
+              )
             )}
           </Fragment>
         );

@@ -170,11 +170,13 @@
 //   );
 // }
 
+// chequeTrackerDetailsDrawer.tsx
+// chequeTrackerDetailsDrawer.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { Drawer, Button, Text, Badge } from "rizzui";
-import { MdClose, MdEdit } from "react-icons/md";
+import { MdClose, MdEdit, MdDelete } from "react-icons/md";
 import toast from "react-hot-toast";
 import dayjs from "dayjs";
 import WidgetCard from "@core/components/cards/widget-card";
@@ -187,6 +189,7 @@ import {
 } from "@/validators/chequeTracker.schema";
 import ChequeTrackerForm from "../create-edit/form";
 import chequeService from "@/services/chequeTrackerService";
+import DeleteConfirmModal from "@core/components/DeleteConfirmModal";
 
 export default function ChequeTrackerDetailsDrawer({
   cheque,
@@ -201,6 +204,8 @@ export default function ChequeTrackerDetailsDrawer({
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [filePreviews, setFilePreviews] = useState<Record<string, string[]>>({
     attachments: cheque.attachments || [],
   });
@@ -240,11 +245,11 @@ export default function ChequeTrackerDetailsDrawer({
       containerClassName="!max-w-[calc(100%-480px)] !shadow-2xl z-[999]"
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 p-4 border-b border-gray-200 dark:border-gray-700">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
           Cheque Details
         </h2>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 sm:justify-end">
           {isEditing ? (
             <Button
               size="sm"
@@ -262,8 +267,44 @@ export default function ChequeTrackerDetailsDrawer({
               <MdEdit className="me-1" /> Edit
             </Button>
           )}
-          <Button size="sm" color="danger" variant="outline" onClick={onClose}>
-            <MdClose className="w-5 h-5" />
+
+          <DeleteConfirmModal
+            isOpen={deleteOpen}
+            onClose={() => setDeleteOpen(false)}
+            onConfirm={async () => {
+              try {
+                setDeleting(true);
+                toast.loading("Deleting cheque...");
+                await chequeService.delete(cheque._id);
+                toast.dismiss();
+                toast.success(
+                  `Cheque ${cheque.cheque_number} deleted successfully.`
+                );
+                setDeleteOpen(false);
+                if (onUpdated) onUpdated();
+                onClose();
+              } catch {
+                toast.dismiss();
+                toast.error("Failed to delete cheque.");
+              } finally {
+                setDeleting(false);
+              }
+            }}
+            loading={deleting}
+            title="Delete Cheque"
+            description={`Are you sure you want to delete cheque ${cheque.cheque_number}?`}
+          />
+
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setDeleteOpen(true)}
+          >
+            <MdDelete className="me-1" /> Delete
+          </Button>
+
+          <Button size="sm" variant="outline" onClick={onClose}>
+            <MdClose className="w-5 h-5" /> Close
           </Button>
         </div>
       </div>
@@ -315,10 +356,10 @@ export default function ChequeTrackerDetailsDrawer({
                       <Badge
                         className={`capitalize ${
                           cheque.cheque_status === "Cleared"
-                            ? "bg-green-100 text-green-800"
+                            ? "bg-green-500 text-white"
                             : cheque.cheque_status === "Bounced"
-                              ? "bg-red-100 text-red-800"
-                              : "bg-blue-100 text-blue-800"
+                              ? "bg-red-500 text-white"
+                              : "bg-blue-500 text-white"
                         }`}
                       >
                         {cheque.cheque_status || "N/A"}

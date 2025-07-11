@@ -168,7 +168,7 @@ axiosClient.interceptors.response.use(
 
         // ✅ Store new access token in cookie
         Cookies.set("accessToken", newAccessToken, {
-          expires: 7,
+          expires: 15,
           secure: process.env.NODE_ENV === "production",
           sameSite: "Lax",
           path: "/",

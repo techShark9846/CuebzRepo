@@ -8,16 +8,7 @@ import { routesTenant } from "@/config/routes";
 export default function ChequeTrackerPage() {
   return (
     <>
-      <PageHeader title="Cheque Tracker" breadcrumb={[]}>
-        <div className="mt-4 flex items-center gap-3">
-          <Link href={routesTenant.financials.createChequeTracker}>
-            <Button>
-              <PiPlusBold className="me-1.5 size-[17px]" />
-              Add Cheque Entry
-            </Button>
-          </Link>
-        </div>
-      </PageHeader>
+      <PageHeader title="Cheque Tracker" breadcrumb={[]}></PageHeader>
       <ChequeTrackerTable pageSize={20} />
     </>
   );

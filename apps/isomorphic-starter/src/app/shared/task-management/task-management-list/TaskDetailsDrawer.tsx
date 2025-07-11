@@ -357,6 +357,7 @@ export default function TaskDetailsDrawer({
             </WidgetCard>
 
             <WidgetCard title="Description">
+              <br />
               <Text className="text-sm text-gray-700 whitespace-pre-line">
                 {task.description || "No description provided."}
               </Text>
@@ -364,6 +365,7 @@ export default function TaskDetailsDrawer({
 
             {task.comments && (
               <WidgetCard title="Comments">
+                <br />
                 <Text className="text-sm text-gray-700 whitespace-pre-line">
                   {task.comments}
                 </Text>
@@ -372,6 +374,7 @@ export default function TaskDetailsDrawer({
 
             {Array.isArray(task.attachments) && task.attachments.length > 0 && (
               <WidgetCard title="Attachments">
+                <br />
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {task.attachments.map((attachment: string, index: number) => {
                     const isImage = /\.(jpg|jpeg|png|gif)$/i.test(attachment);

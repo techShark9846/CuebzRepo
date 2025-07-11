@@ -40,6 +40,7 @@
 //   );
 // }
 
+// Header.tsx
 "use client";
 
 import Link from "next/link";
@@ -53,7 +54,7 @@ import Image from "next/image";
 
 function LogoWrapper() {
   return (
-    <div className="relative w-[200px] h-16 overflow-hidden bg-white rounded-br-[80px] shadow-md z-10 py-10">
+    <div className="relative w-[180px] sm:w-[200px] h-16 overflow-hidden bg-white rounded-br-[80px] shadow-md z-10 py-10">
       <Link
         href="/"
         aria-label="Site Logo"
@@ -69,7 +70,6 @@ function LogoWrapper() {
         />
       </Link>
 
-      {/* Right curved purple overlay */}
       <div className="absolute -right-16 top-0 w-[180px] h-full rounded-full pointer-events-none" />
     </div>
   );
@@ -77,29 +77,25 @@ function LogoWrapper() {
 
 export default function Header() {
   return (
-    <StickyHeader className="z-[990] bg-primary text-white h-[80px]  flex items-center justify-between shadow-md border-b-4 border-tertiary">
-      <div className="flex items-center gap-8">
-        <div className="-ml-4 pr-2">
-          {/* <Link href="/" aria-label="Site Logo" className="shrink-0">
-            <Logo className="max-w-[120px] text-white" />
-          </Link> */}
+    <StickyHeader className="z-[990] bg-gradient-to-b from-[#2B2068] to-primary text-white h-[80px] flex items-center justify-between shadow-md border-b-4 border-tertiary px-2 sm:px-4">
+      <div className="flex items-center gap-4 sm:gap-8">
+        <div className="-ml-2 sm:-ml-4 pr-2">
           <LogoWrapper />
         </div>
-        {/* px-4 lg:px-6 */}
 
-        <div className="hidden sm:block text-sm">
+        <div className="hidden sm:block text-xs sm:text-sm">
           <span className="font-medium text-white/70">Workspace</span>
-          <div className="font-semibold text-white leading-none">
+          <div className="font-semibold text-white leading-none truncate max-w-[120px] sm:max-w-none">
             ABC Store Bangalore ▾
           </div>
         </div>
       </div>
-      {/* Center: Search */}
-      <div className="flex-1 mx-4 max-w-lg hidden md:block">
+
+      <div className="flex-1 mx-2 sm:mx-4 max-w-[180px] sm:max-w-lg hidden md:block">
         <SearchWidget className="w-full" placeholderClassName="text-white/60" />
       </div>
-      {/* Right: Profile, Notifications, Settings */}
-      <div className="flex items-center gap-4">
+
+      <div className="flex items-center gap-2 sm:gap-4">
         <HeaderMenuRight />
       </div>
     </StickyHeader>

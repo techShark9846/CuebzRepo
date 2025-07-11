@@ -401,7 +401,7 @@ function TableHeadBasic<TData extends Record<string, any>>({
               width: header.getSize(),
             }}
             className={cn(
-              "group text-xs font-medium text-gray-600 bg-[#F4F4F5]",
+              "group text-xs font-medium text-gray-600 bg-[#DCDCE0]",
               isPinned && canPin && "sticky z-10",
               !isPinned && canResize && "relative",
               isPinned && isLeftScrollable && "sticky-right",
