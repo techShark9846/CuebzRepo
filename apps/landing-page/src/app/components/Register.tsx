@@ -213,7 +213,7 @@ const Register = () => {
           <div className="text-center">
             <Briefcase className="mx-auto text-purple-700" size={40} />
             <h2 className="mt-4 text-2xl font-bold text-gray-900 dark:text-white">
-              Create your OpSys Account
+              Create your Cuebz
             </h2>
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Start streamlining your operations today.

@@ -652,10 +652,10 @@ const App = () => {
               <li className="flex items-center">
                 <Mail size={20} className="mr-3 text-gray-500" />
                 <a
-                  href="mailto:info@opsyssaas.com"
+                  href="mailto:info@cuebz.com"
                   className="text-gray-400 hover:text-white transition duration-300"
                 >
-                  info@opsyssaas.com
+                  info@Cuebz.com
                 </a>
               </li>
               <li className="flex items-center">
