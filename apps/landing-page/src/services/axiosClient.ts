@@ -2,7 +2,10 @@ import axios from "axios";
 
 // Create an Axios instance
 const axiosClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api", // API base URL
+  baseURL:
+    process.env.NODE_ENV === "production"
+      ? "https://api.spydotechnologies.com/api"
+      : "http://localhost:5000/api", // API base URL
   timeout: 5000, // Request timeout
   headers: {
     "Content-Type": "application/json",

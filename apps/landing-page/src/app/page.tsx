@@ -51,12 +51,14 @@ const App = () => {
         <div className="container mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <a
-            href="#"
+            href="/"
             className="flex items-center space-x-2 text-2xl font-bold"
-            style={{ color: primaryColor }}
           >
-            <Briefcase size={28} />
-            <span>OpSys SaaS</span>
+            <img
+              src="/logo.png"
+              alt="Cuebz Logo"
+              className="w-32 h-20 object-contain"
+            />
           </a>
 
           {/* Desktop Navigation */}
@@ -85,6 +87,14 @@ const App = () => {
             >
               Contact
             </a>
+
+            <a
+              href="https://main.dnmsju251qoe1.amplifyapp.com/signin"
+              className="text-gray-600 hover:text-gray-900 font-medium transition duration-300"
+            >
+              Login
+            </a>
+
             <button
               className="px-6 py-2 rounded-full text-white font-semibold shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-0.5"
               style={{
@@ -139,6 +149,15 @@ const App = () => {
             >
               Contact
             </a>
+
+            <a
+              href="https://main.dnmsju251qoe1.amplifyapp.com/signin"
+              onClick={() => setIsMenuOpen(false)}
+              className="block py-2 text-gray-700 hover:bg-gray-100 rounded-md px-3"
+            >
+              Login
+            </a>
+
             <button
               className="w-full mt-4 py-2 rounded-full text-white font-semibold shadow-lg hover:shadow-xl transition duration-300"
               style={{
@@ -174,6 +193,7 @@ const App = () => {
                   backgroundColor: primaryColor,
                   boxShadow: `0 6px 20px 0 ${primaryColor}60`,
                 }}
+                onClick={() => router.push("/register")}
               >
                 Request a Demo{" "}
                 <ChevronRight size={20} className="inline-block ml-2" />
@@ -367,7 +387,7 @@ const App = () => {
           {/* Content */}
           <div className="md:w-1/2 text-center md:text-left">
             <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-gray-900">
-              Why Choose OpSys SaaS for Your Business?
+              Why Choose Cuebz for Your Business?
             </h2>
             <p className="text-lg text-gray-600 mb-8">
               We understand the complexities of modern business operations. Our
@@ -430,7 +450,7 @@ const App = () => {
           </h2>
           <p className="text-lg text-gray-600 mb-12 max-w-3xl mx-auto">
             Hear from businesses that have transformed their operations with
-            OpSys SaaS.
+            Cuebz.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -442,8 +462,8 @@ const App = () => {
                 ))}
               </div>
               <p className="text-gray-700 italic mb-6">
-                &quot;OpSys SaaS has revolutionized how we manage our projects.
-                The automation features alone saved us countless hours!&quot;
+                &quot;Cuebz has revolutionized how we manage our projects. The
+                automation features alone saved us countless hours!&quot;
               </p>
               <div className="w-16 h-16 rounded-full bg-gray-200 mb-3 overflow-hidden">
                 <img
@@ -531,7 +551,7 @@ const App = () => {
           </h2>
           <p className="text-xl mb-10 max-w-2xl mx-auto">
             Join hundreds of businesses already optimizing their workflows and
-            achieving unprecedented growth with OpSys SaaS.
+            achieving unprecedented growth with Cuebz.
           </p>
           <button
             className="px-10 py-4 rounded-full bg-white text-lg font-semibold shadow-xl hover:shadow-2xl transition duration-300 transform hover:-translate-y-1"
@@ -549,12 +569,16 @@ const App = () => {
           {/* Company Info */}
           <div className="mb-6 md:mb-0">
             <a
-              href="#"
-              className="flex items-center space-x-2 text-2xl font-bold mb-4 text-white"
+              href="/"
+              className="flex items-center space-x-2 text-2xl font-bold"
             >
-              <Briefcase size={28} />
-              <span>OpSys SaaS</span>
+              <img
+                src="/logo.png"
+                alt="Cuebz Logo"
+                className="w-32 h-20 object-contain"
+              />
             </a>
+
             <p className="text-gray-400 leading-relaxed">
               Empowering businesses with intelligent operations management
               solutions for a more efficient future.
@@ -664,7 +688,7 @@ const App = () => {
           </div>
         </div>
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500">
-          &copy; {new Date().getFullYear()} OpSys SaaS. All rights reserved.
+          &copy; {new Date().getFullYear()} Cuebz. All rights reserved.
         </div>
       </footer>
     </div>

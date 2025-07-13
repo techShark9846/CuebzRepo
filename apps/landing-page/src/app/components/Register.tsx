@@ -197,7 +197,7 @@ const Register = () => {
         toast.success("OTP Sent to Email for verification!");
 
         // Redirect to OTP verification
-        router.replace(`/otp?email=${values.email}`);
+        router.replace(`/verify-otp?email=${values.email}`);
       } catch {
         setStatus({ type: "error", message: "Network error" });
       } finally {
