@@ -63,6 +63,7 @@ import { usePathname } from "next/navigation";
 import { Modal } from "rizzui";
 import SearchTrigger from "./search-trigger";
 import SearchList from "./search-list";
+import { PiMagnifyingGlassBold } from "react-icons/pi";
 
 export default function SearchWidget({
   className,
@@ -95,14 +96,31 @@ export default function SearchWidget({
   return (
     <>
       <div
-        className="hidden md:flex items-center px-4 py-2 rounded-md bg-white/10 text-white border border-white/20 hover:bg-white/20 transition cursor-pointer"
+        className="hidden md:flex items-center py-2 cursor-pointer"
         onClick={() => setOpen(true)}
       >
-        <span className="text-sm text-white/90">Search</span>
-        <kbd className="ml-3 px-1.5 py-0.5 text-xs font-semibold text-white bg-white/20 rounded">
-          Ctrl K
-        </kbd>
+        <PiMagnifyingGlassBold className="h-[18px] w-[18px] text-white mr-2" />
+        <span className="text-lg text-white/90">Search</span>
       </div>
+
+      {/* <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-4 w-4 text-white mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z"
+          />
+        </svg> */}
+
+      {/* <kbd className="ml-3 px-1.5 py-0.5 text-xs font-semibold text-white bg-white/20 rounded">
+          Ctrl K
+        </kbd> */}
 
       <Modal
         isOpen={open}

@@ -9,7 +9,9 @@ export default function ChequeTrackerPage() {
   return (
     <>
       <PageHeader title="Cheque Tracker" breadcrumb={[]}></PageHeader>
-      <ChequeTrackerTable pageSize={20} />
+      <div className="p-4">
+        <ChequeTrackerTable pageSize={20} />
+      </div>
     </>
   );
 }

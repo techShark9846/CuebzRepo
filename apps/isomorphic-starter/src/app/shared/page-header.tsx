@@ -1,4 +1,3 @@
-import { Title } from "rizzui";
 import cn from "@core/utils/class-names";
 import Breadcrumb from "@core/ui/breadcrumb";
 
@@ -16,17 +15,12 @@ export default function PageHeader({
 }: React.PropsWithChildren<PageHeaderTypes>) {
   return (
     <header
-      className={cn("@container xs:-mt-2", className)}
-      style={{ marginTop: "20px" }}
+      className={cn("@container xs:-mt-2 -mt-2", className)}
+      style={{ background: "#e2e4e5" }}
     >
-      <div className="flex flex-col @lg:flex-row @lg:items-center @lg:justify-between">
-        <div>
-          <Title
-            as="h2"
-            className="mb-2 text-[22px] lg:text-2xl 4xl:text-[26px]"
-          >
-            {title}
-          </Title>
+      <div className="flex flex-col @lg:flex-row @lg:items-center @lg:justify-between h-[80px]">
+        <div className="p-4">
+          <h2 className="mb-2 text-[20px] mt-12">{title}</h2>
 
           <Breadcrumb
             separator=""

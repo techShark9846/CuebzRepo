@@ -9,7 +9,9 @@ export default function TaskManagementPage() {
   return (
     <>
       <PageHeader title="Task Management" breadcrumb={[]}></PageHeader>
-      <TasksTable pageSize={20} />
+      <div className="p-4">
+        <TasksTable pageSize={20} />
+      </div>
     </>
   );
 }

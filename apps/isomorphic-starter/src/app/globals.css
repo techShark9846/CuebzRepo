@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
 @import "react-calendar/dist/Calendar.css";
 
 @tailwind base;
@@ -176,6 +178,7 @@
   /* base style */
   html {
     @apply h-full antialiased;
+    font-family: "Inter", sans-serif !important;
   }
 
   #player {
@@ -184,6 +187,7 @@
 
   body {
     @apply flex min-h-full flex-col overflow-x-hidden text-sm text-gray-600 dark:bg-gray-50;
+    font-family: "Inter", sans-serif !important;
   }
 
   input::-ms-clear,
@@ -211,7 +215,7 @@
   h4,
   h5,
   h6 {
-    @apply font-lexend font-bold text-gray-900 dark:text-gray-700;
+    @apply font-bold text-gray-900 dark:text-gray-700;
   }
 
   h1 {

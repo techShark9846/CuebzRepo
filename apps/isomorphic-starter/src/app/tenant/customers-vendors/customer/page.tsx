@@ -9,7 +9,9 @@ export default function CustomersPage() {
   return (
     <>
       <PageHeader title="Customers" breadcrumb={[]}></PageHeader>
-      <CustomersTable pageSize={20} />
+      <div className="p-4">
+        <CustomersTable pageSize={20} />
+      </div>
     </>
   );
 }

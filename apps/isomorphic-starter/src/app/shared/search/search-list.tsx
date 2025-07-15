@@ -41,46 +41,48 @@ export default function SearchList({ onClose }: { onClose?: () => void }) {
     return () => {
       inputRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <>
-      <div className="flex items-center px-5 py-4">
-        <Input
-          variant="flat"
-          value={searchText}
-          ref={inputRef}
-          onChange={(e) => setSearchText(() => e.target.value)}
-          placeholder="Search pages here"
-          className="flex-1"
-          prefix={
-            <PiMagnifyingGlassBold className="h-[18px] w-[18px] text-gray-600" />
-          }
-          suffix={
-            searchText && (
-              <Button
-                size="sm"
-                variant="text"
-                className="h-auto w-auto px-0"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setSearchText(() => "");
-                }}
-              >
-                Clear
-              </Button>
-            )
-          }
-        />
-        <ActionIcon
-          size="sm"
-          variant="text"
-          className="ms-3 text-gray-500 hover:text-gray-700"
-          onClick={onClose}
-        >
-          <PiXBold className="h-5 w-5" />
-        </ActionIcon>
+      <div className="bg-gradient-to-r from-[#2A0A8F] to-[#151062] px-5 py-4">
+        <div className="relative w-full">
+          <Input
+            variant="flat"
+            value={searchText}
+            ref={inputRef}
+            onChange={(e) => setSearchText(() => e.target.value)}
+            placeholder="Search"
+            className="w-full text-white placeholder:text-white/60 bg-transparent border-none focus:ring-0"
+            inputClassName="text-white placeholder:text-white/60"
+            prefix={
+              <PiMagnifyingGlassBold className="h-[18px] w-[18px] text-white" />
+            }
+            suffix={
+              searchText && (
+                <Button
+                  size="sm"
+                  variant="text"
+                  className="h-auto w-auto px-0 text-white"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setSearchText(() => "");
+                  }}
+                >
+                  Clear
+                </Button>
+              )
+            }
+          />
+          <ActionIcon
+            size="sm"
+            variant="text"
+            className="absolute right-[-40px] top-1 text-white hover:text-gray-200"
+            onClick={onClose}
+          >
+            <PiXBold className="h-5 w-5" />
+          </ActionIcon>
+        </div>
       </div>
 
       <div className="custom-scrollbar max-h-[60vh] overflow-y-auto border-t border-gray-300 px-2 py-4">

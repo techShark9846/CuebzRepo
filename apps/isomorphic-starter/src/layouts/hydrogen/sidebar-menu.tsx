@@ -733,7 +733,7 @@ export function SidebarMenu({
                         className={cn(
                           "flex items-center justify-between cursor-pointer rounded-md px-3 py-2 font-medium text-sm transition-colors duration-150 my-2",
                           isOpen
-                            ? "bg-yellow-400 text-white"
+                            ? "bg-yellow-400 text-black"
                             : "text-gray-800 hover:bg-gray-100"
                         )}
                         title={isCollapsed ? item.name : ""}

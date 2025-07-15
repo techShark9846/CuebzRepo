@@ -74,7 +74,7 @@ export default function CallLogFilters({
               globalSearch: e.target.value,
             }))
           }
-          inputClassName="h-9 ml-4"
+          inputClassName="h-10 border border-[#657079] placeholder-[#657079] text-[#657079] ml-4"
           clearable={true}
           prefix={<PiMagnifyingGlassBold className="size-4" />}
         />

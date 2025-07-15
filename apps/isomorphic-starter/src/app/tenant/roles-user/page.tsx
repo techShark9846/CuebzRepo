@@ -18,7 +18,9 @@ export default function RolesUserPage() {
           </Link>
         </div>
       </PageHeader>
-      <RolesUserTable pageSize={20} />
+      <div className="p-4">
+        <RolesUserTable pageSize={20} />
+      </div>
     </>
   );
 }

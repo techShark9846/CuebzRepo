@@ -91,6 +91,8 @@ export default function Header() {
         </div>
       </div>
 
+      <div className="h-16 w-px bg-black/50" />
+
       <div className="flex-1 mx-2 sm:mx-4 max-w-[180px] sm:max-w-lg hidden md:block">
         <SearchWidget className="w-full" placeholderClassName="text-white/60" />
       </div>

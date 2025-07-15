@@ -8,7 +8,9 @@ export default function VisitorsPage() {
   return (
     <>
       <PageHeader title="Visitors" breadcrumb={[]}></PageHeader>
-      <VisitorsTable pageSize={20} />
+      <div className="p-4">
+        <VisitorsTable pageSize={20} />
+      </div>
     </>
   );
 }

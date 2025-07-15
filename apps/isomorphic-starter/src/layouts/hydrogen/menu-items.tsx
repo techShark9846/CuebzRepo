@@ -51,12 +51,12 @@ export const menuItemsTenant = [
     name: "Analytics",
     href: "/dashboard",
     key: MODULES.dashboard,
-    icon: <PiChartBarDuotone />,
+    icon: <img src="/dashboard.svg" alt="Analytics" className="w-5 h-5" />,
   },
   {
     name: "Reception",
     href: "#",
-    icon: <PiHeadsetDuotone />,
+    icon: <img src="/concierge.svg" alt="Reception" className="w-5 h-5" />,
     dropdownItems: [
       {
         name: "Visitor Logs",
@@ -73,7 +73,7 @@ export const menuItemsTenant = [
   {
     name: "Employees",
     href: "#",
-    icon: <PiUsersThreeDuotone />,
+    icon: <img src="/assignment_ind.svg" alt="Employees" className="w-5 h-5" />,
     dropdownItems: [
       {
         name: "Employee Records",
@@ -90,7 +90,13 @@ export const menuItemsTenant = [
   {
     name: "Finance",
     href: "#",
-    icon: <PiCurrencyDollarDuotone />,
+    icon: (
+      <img
+        src="/account_balance_wallet.svg"
+        alt="Finance"
+        className="w-5 h-5"
+      />
+    ),
     dropdownItems: [
       {
         name: "Cheque Tracker",
@@ -107,7 +113,9 @@ export const menuItemsTenant = [
   {
     name: "Customers & Vendors",
     href: "#",
-    icon: <PiStorefrontDuotone />,
+    icon: (
+      <img src="/group.svg" alt="Customer and Vendors" className="w-5 h-5" />
+    ),
     dropdownItems: [
       {
         name: "Customer",
@@ -124,7 +132,7 @@ export const menuItemsTenant = [
   {
     name: "Sales Management",
     href: "#",
-    icon: <PiBriefcaseDuotone />,
+    icon: <img src="/campaign.svg" alt="Sales" className="w-5 h-5" />,
     dropdownItems: [
       {
         name: "Leads",
@@ -146,7 +154,7 @@ export const menuItemsTenant = [
   {
     name: "Company",
     href: "#",
-    icon: <PiBuildingsDuotone />,
+    icon: <img src="/corporate_fare.svg" alt="Company" className="w-5 h-5" />,
     dropdownItems: [
       {
         name: "Documents",
@@ -179,12 +187,18 @@ export const menuItemsTenant = [
     name: "News & Updates",
     href: routesTenant.newsUpdates,
     key: MODULES.newsUpdates,
-    icon: <PiNewspaperClippingDuotone />,
+    icon: <img src="/full_coverage.svg" alt="News" className="w-5 h-5" />,
   },
   {
     name: "Roles & Users",
     href: routesTenant.rolesUser.roleUserList,
-    icon: <PiUserCircleDuotone />,
+    icon: (
+      <img
+        src="/settings_account_box.svg"
+        alt="Roles & Users"
+        className="w-5 h-5"
+      />
+    ),
     badge: "",
   },
 ];

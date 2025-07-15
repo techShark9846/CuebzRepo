@@ -9,7 +9,9 @@ export default function EmployeesPage() {
   return (
     <>
       <PageHeader title="Employees" breadcrumb={[]}></PageHeader>
-      <EmployeesTable pageSize={20} />
+      <div className="p-4">
+        <EmployeesTable pageSize={20} />
+      </div>
     </>
   );
 }

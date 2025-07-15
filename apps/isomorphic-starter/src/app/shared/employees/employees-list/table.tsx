@@ -134,6 +134,7 @@ export default function EmployeesTable({
   return (
     <div>
       <EmployeeDetailsDrawer
+        onDeleted={fetchEmployees}
         employee={selectedEmployee}
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}

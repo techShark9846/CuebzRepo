@@ -9,7 +9,9 @@ export default function CallLogsPage() {
   return (
     <>
       <PageHeader title="Call Logs" breadcrumb={[]}></PageHeader>
-      <CallLogsTable pageSize={20} />
+      <div className="p-4">
+        <CallLogsTable pageSize={20} />
+      </div>
     </>
   );
 }

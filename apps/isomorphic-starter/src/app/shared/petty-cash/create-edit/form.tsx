@@ -186,7 +186,7 @@ export default function PettyCashForm({ filePreviews, setFilePreviews }: any) {
       <hr className="my-8 border-gray-300" />
 
       {/* Attachment */}
-      <div>
+      {/* <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Attachment
         </label>
@@ -202,7 +202,7 @@ export default function PettyCashForm({ filePreviews, setFilePreviews }: any) {
           </p>
         )}
         {renderMultipleFilePreviews(filePreviews.attachment, "attachment")}
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -20,7 +20,9 @@ export default function PettyCashPage() {
           </Link>
         </div>
       </PageHeader>
-      <PettyCashTable pageSize={20} />
+      <div className="p-4">
+        <PettyCashTable pageSize={20} />
+      </div>
     </>
   );
 }

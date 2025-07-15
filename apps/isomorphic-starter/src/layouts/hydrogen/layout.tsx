@@ -70,7 +70,7 @@ export default function HydrogenLayout({
             : "lg:ml-[270px] lg:w-[calc(100%-270px)]"
         )}
       >
-        <div className="p-4">{children}</div>
+        <div>{children}</div>
       </div>
     </div>
   );

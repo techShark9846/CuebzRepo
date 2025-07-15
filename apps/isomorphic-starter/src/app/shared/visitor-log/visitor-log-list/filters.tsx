@@ -63,6 +63,7 @@ export default function Filters({
         </Link>
         <Input
           type="search"
+          className=" placeholder-[#657079]"
           placeholder="Search by visitor name..."
           value={filters.globalSearch}
           onClear={() =>
@@ -74,9 +75,9 @@ export default function Filters({
               globalSearch: e.target.value,
             }))
           }
-          inputClassName="h-10"
+          inputClassName="h-10 border border-[#657079] placeholder-[#657079] text-[#657079]"
           clearable={true}
-          prefix={<PiMagnifyingGlassBold className="size-4" />}
+          prefix={<PiMagnifyingGlassBold className="size-4 text-[#657079]" />}
         />
       </div>
 
