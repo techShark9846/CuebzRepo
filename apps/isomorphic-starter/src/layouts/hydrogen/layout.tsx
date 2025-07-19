@@ -64,7 +64,7 @@ export default function HydrogenLayout({
       {/* Main Content */}
       <div
         className={cn(
-          "pt-16 transition-all duration-300", // padding top for header
+          "pt-16 transition-all duration-300 bg-[#f8f8f8] min-h-screen", // padding top for header
           isCollapsed
             ? "lg:ml-[70px] lg:w-[calc(100%-70px)]"
             : "lg:ml-[270px] lg:w-[calc(100%-270px)]"

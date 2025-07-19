@@ -691,6 +691,7 @@
 //     </div>
 //   );
 // }
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -698,17 +699,16 @@ import { Tab } from "rizzui";
 import documentService from "@/services/documentService";
 import { HiDownload, HiOutlinePencil } from "react-icons/hi";
 import dayjs from "dayjs";
-import EditDocumentDrawer from "./EditDocumentDrawer"; // make sure this path is correct
+import EditDocumentDrawer from "./EditDocumentDrawer";
+import PageHeader from "@/app/shared/page-header";
 
 function getExpiryText(dateString?: string | null) {
   if (!dateString) return null;
-
   const today = dayjs();
   const expiry = dayjs(dateString);
   const daysLeft = expiry.diff(today, "day");
-
   if (daysLeft < 0) return { text: "Expired", color: "text-red-500" };
-  if (daysLeft <= 30)
+  if (daysLeft <= 15)
     return { text: "Expiring soon", color: "text-purple-500" };
   return {
     text: `Valid till: ${expiry.format("DD-MMM-YYYY")}`,
@@ -717,34 +717,36 @@ function getExpiryText(dateString?: string | null) {
 }
 
 function DocumentCard({ label, file, expiry_date, onEdit }: any) {
-  const fileName = typeof file === "object" && file?.file ? file.file : file;
-  const displayName = fileName?.split("/").pop() || "No File";
+  const fileUrl = typeof file === "object" && file?.file ? file.file : file;
+  const displayName = fileUrl?.split("/").pop() || "No File";
   const expiry = getExpiryText(expiry_date);
 
   return (
-    <div className="border rounded-xl p-4 bg-white">
-      <div className="flex items-center justify-between mb-2">
-        <span className="font-semibold">{label}</span>
+    <div className="border border-gray-200 rounded-xl px-4 py-3 bg-white shadow-sm">
+      <div className="font-semibold text-sm mb-3">{label}</div>
+      <div className="flex items-center text-sm text-gray-600 mb-4 gap-2">
+        <img src="/pdf-icon.svg" alt="pdf" className="w-5 h-5 mr-1" />
+        <span className="truncate text-[#657079]">{displayName}</span>
+      </div>
+      <div className="flex items-center border-t border-gray-100 pt-2 justify-between">
+        {expiry && (
+          <span className={`text-sm font-bold ${expiry.color}`}>
+            {expiry.text}
+          </span>
+        )}
         <div className="flex gap-2">
           <HiOutlinePencil
             className="w-4 h-4 cursor-pointer text-gray-500 hover:text-gray-800"
             onClick={onEdit}
           />
-          <HiDownload
-            className="w-4 h-4 cursor-pointer text-gray-500 hover:text-gray-800"
-            onClick={() => window.open(fileName, "_blank")}
-          />
+          {fileUrl && (
+            <HiDownload
+              className="w-4 h-4 cursor-pointer text-gray-500 hover:text-gray-800"
+              onClick={() => window.open(fileUrl, "_blank")}
+            />
+          )}
         </div>
       </div>
-      <div className="flex items-center gap-2 text-sm text-gray-600">
-        <span className="text-red-500 font-semibold">PDF</span>
-        <span className="truncate">{displayName}</span>
-      </div>
-      {expiry && (
-        <span className={`text-sm font-medium mt-1 ${expiry.color}`}>
-          {expiry.text}
-        </span>
-      )}
     </div>
   );
 }
@@ -764,8 +766,9 @@ type DocumentData = {
 export default function DocumentManagementViewOnly() {
   const [document, setDocument] = useState<DocumentData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedDoc, setSelectedDoc] = useState(null);
+  const [selectedDoc, setSelectedDoc] = useState<any>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selectedTab, setSelectedTab] = useState(0);
 
   useEffect(() => {
     fetchDocument();
@@ -782,7 +785,7 @@ export default function DocumentManagementViewOnly() {
     }
   };
 
-  const handleEdit = (field: any, section: any, sectionName: any) => {
+  const handleEdit = (field: string, section: any, sectionName: string) => {
     setSelectedDoc({
       key: field,
       section: sectionName,
@@ -794,8 +797,26 @@ export default function DocumentManagementViewOnly() {
     setDrawerOpen(true);
   };
 
+  // Updated: handleUpdate function in DocumentManagementViewOnly
   const handleUpdate = async (formData: FormData) => {
+    if (!selectedDoc) return;
+
     try {
+      // Cleanup any old expiry_dates field first
+      const fieldKey = selectedDoc.key;
+
+      const expiryRaw = formData.get("expiry_dates");
+      let expiryPayload: Record<string, string | null> = {};
+
+      if (typeof expiryRaw === "string") {
+        expiryPayload = JSON.parse(expiryRaw);
+      }
+
+      formData.delete("expiry_dates");
+      formData.append("expiry_dates", JSON.stringify(expiryPayload));
+
+      // ✅ DO NOT append any dummy file
+
       await documentService.upsertDocument(formData);
       await fetchDocument();
     } catch (error) {
@@ -805,9 +826,9 @@ export default function DocumentManagementViewOnly() {
     }
   };
 
-  const renderCards = (fields: any, section: any, sectionName: any) => (
+  const renderCards = (fields: string[], section: any, sectionName: string) => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {fields.map((field: any) => (
+      {fields.map((field) => (
         <DocumentCard
           key={field}
           label={field
@@ -823,54 +844,79 @@ export default function DocumentManagementViewOnly() {
   if (loading) return <div className="p-6">Loading...</div>;
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <h1 className="text-2xl font-semibold mb-4">Document Management</h1>
+    <div className="max-w-7xl mx-auto bg-[#f8f8f8]">
+      <PageHeader title="Document Management" breadcrumb={[]} />
+      <div className="p-6">
+        <Tab
+          selectedIndex={selectedTab}
+          onChange={setSelectedTab}
+          className="gap-0"
+        >
+          <Tab.List
+            className="flex rounded-t-md overflow-hidden w-fit gap-0"
+            style={{ borderBottom: "4px solid #D1D8DD", width: "100%" }}
+          >
+            <Tab.ListItem
+              className={`px-5 py-2 text-sm font-semibold ${
+                selectedTab === 0
+                  ? "bg-[#D1D8DD] text-gray-900"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              Legal Documents
+            </Tab.ListItem>
+            <Tab.ListItem
+              className={`px-5 py-2 text-sm font-semibold border-l border-gray-200 ${
+                selectedTab === 1
+                  ? "bg-[#D1D8DD] text-gray-900"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              Business Documents
+            </Tab.ListItem>
+          </Tab.List>
 
-      <Tab>
-        <Tab.List>
-          <Tab.ListItem>Legal Documents</Tab.ListItem>
-          <Tab.ListItem>Business Documents</Tab.ListItem>
-        </Tab.List>
-        <Tab.Panels>
-          <Tab.Panel>
-            {renderCards(
-              [
-                "trade_license",
-                "moa",
-                "aoa",
-                "emigration_card",
-                "certificate_of_incorporation",
-                "shareholder_agreement",
-                "tenancy_contract_or_ejari",
-                "vat_registration_certificate",
-                "corporate_tax_certificate",
-                "passport_copies",
-                "visa_residence_permits",
-              ],
-              document?.section_1,
-              "section_1"
-            )}
-          </Tab.Panel>
-          <Tab.Panel>
-            {renderCards(
-              [
-                "business_plan_document",
-                "bank_statement",
-                "power_of_attorney",
-                "insurance_policies",
-                "employee_handbook_or_hr_policies",
-                "intellectual_property_registrations",
-                "trade_mark_certificate",
-                "iso_certification",
-                "company_policies",
-                "contract_templates",
-              ],
-              document?.section_2,
-              "section_2"
-            )}
-          </Tab.Panel>
-        </Tab.Panels>
-      </Tab>
+          <Tab.Panels>
+            <Tab.Panel>
+              {renderCards(
+                [
+                  "trade_license",
+                  "moa",
+                  "aoa",
+                  "emigration_card",
+                  "certificate_of_incorporation",
+                  "shareholder_agreement",
+                  "tenancy_contract_or_ejari",
+                  "vat_registration_certificate",
+                  "corporate_tax_certificate",
+                  "passport_copies",
+                  "visa_residence_permits",
+                ],
+                document?.section_1,
+                "section_1"
+              )}
+            </Tab.Panel>
+            <Tab.Panel>
+              {renderCards(
+                [
+                  "business_plan_document",
+                  "bank_statement",
+                  "power_of_attorney",
+                  "insurance_policies",
+                  "employee_handbook_or_hr_policies",
+                  "intellectual_property_registrations",
+                  "trade_mark_certificate",
+                  "iso_certification",
+                  "company_policies",
+                  "contract_templates",
+                ],
+                document?.section_2,
+                "section_2"
+              )}
+            </Tab.Panel>
+          </Tab.Panels>
+        </Tab>
+      </div>
 
       <EditDocumentDrawer
         open={drawerOpen}

@@ -225,7 +225,7 @@ export default function TaskForm({ filePreviews, setFilePreviews }: any) {
       />
 
       {/* Attachments */}
-      <div>
+      {/* <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Attachments
         </label>
@@ -242,7 +242,7 @@ export default function TaskForm({ filePreviews, setFilePreviews }: any) {
           </p>
         )}
         {renderMultipleFilePreviews(filePreviews.attachments, "attachments")}
-      </div>
+      </div> */}
     </div>
   );
 }

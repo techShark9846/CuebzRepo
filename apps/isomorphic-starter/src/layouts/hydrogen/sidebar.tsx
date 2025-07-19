@@ -115,7 +115,7 @@ export default function Sidebar({
   return (
     <>
       <button
-        className="lg:hidden fixed top-4 left-4 z-[300] text-gray-700 bg-white dark:bg-gray-800 p-2 rounded-md shadow-md"
+        className="lg:hidden fixed top-4 left-4 z-[300] text-gray-700 bg-white dark:bg-gray-800 p-2 rounded-md"
         onClick={toggleSidebar}
         aria-label="Toggle Sidebar"
       >
@@ -124,7 +124,7 @@ export default function Sidebar({
 
       <aside
         className={cn(
-          "fixed top-5 left-0 z-[1] h-full bg-white dark:bg-gray-50 shadow-xl transition-all duration-300 overflow-hidden",
+          "fixed top-5 left-0 z-[1] h-full bg-white dark:bg-gray-50 shadow-[#00000080] shadow-2xl transition-all duration-300 overflow-hidden",
           isMobileOpen
             ? "translate-x-0 w-[270px]"
             : "translate-x-[-100%] lg:translate-x-0",

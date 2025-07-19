@@ -372,7 +372,7 @@ export default function TaskDetailsDrawer({
               </WidgetCard>
             )}
 
-            {Array.isArray(task.attachments) && task.attachments.length > 0 && (
+            {/* {Array.isArray(task.attachments) && task.attachments.length > 0 && (
               <WidgetCard title="Attachments">
                 <br />
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -421,7 +421,7 @@ export default function TaskDetailsDrawer({
                   })}
                 </div>
               </WidgetCard>
-            )}
+            )} */}
           </div>
         )}
       </div>

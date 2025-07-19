@@ -171,7 +171,7 @@ export default function StatCards({ data }: { data: any }) {
   ];
 
   return (
-    <div className="w-full bg-[#e9dcf8] px-6 py-4 rounded-md flex flex-wrap gap-6 items-center justify-start">
+    <div className="w-full bg-[#e9dcf8] px-6 py-4 rounded-md flex flex-wrap gap-6 items-center justify-start mt-3">
       {cards.map((card) => (
         <div key={card.id} className="flex items-center gap-3">
           {/* Icon Circle */}

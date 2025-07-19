@@ -22,9 +22,9 @@ interface ICreateEditTask {
 
 export default function CreateEditTask({ slug, task }: ICreateEditTask) {
   const [isLoading, setLoading] = useState(false);
-  const [filePreviews, setFilePreviews] = useState<Record<string, File | null>>(
-    {}
-  );
+  // const [filePreviews, setFilePreviews] = useState<Record<string, File | null>>(
+  //   {}
+  // );
 
   const methods = useForm<TaskManagementSchema>({
     resolver: zodResolver(taskManagementSchema),
@@ -47,9 +47,9 @@ export default function CreateEditTask({ slug, task }: ICreateEditTask) {
       const response = await taskService.getById(taskId);
       if (response) {
         methods.reset(defaultValues(response.data));
-        setFilePreviews({
-          attachments: response.data.attachments || [],
-        });
+        // setFilePreviews({
+        //   attachments: response.data.attachments || [],
+        // });
       }
     } catch (error) {
       toast.error("Failed to fetch task details.");
@@ -80,7 +80,7 @@ export default function CreateEditTask({ slug, task }: ICreateEditTask) {
     <div>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <Form filePreviews={filePreviews} setFilePreviews={setFilePreviews} />
+          <Form />
           <FormFooter
             isLoading={isLoading}
             submitBtnText={taskId ? "Update Task" : "Create Task"}

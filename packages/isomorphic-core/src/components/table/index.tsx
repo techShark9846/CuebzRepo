@@ -549,7 +549,7 @@ export default function MainTable<TData extends Record<string, any>>({
       <Box
         ref={containerRef}
         className={cn(
-          "custom-scrollbar w-full max-w-full overflow-x-auto border border-[#E4E4E7] rounded-md",
+          "custom-scrollbar w-full max-w-full overflow-x-auto border border-[#E4E4E7] rounded-md border-b-0",
           stickyHeader && "max-h-[600px] overflow-y-auto",
           classNames?.container
         )}
@@ -561,7 +561,7 @@ export default function MainTable<TData extends Record<string, any>>({
           className={cn(
             pinningStyles.baseStyle,
             pinningStyles.variants[variant],
-            "text-sm text-gray-700",
+            "text-sm text-gray-700 bg-white",
             classNames?.tableClassName
           )}
         >

@@ -111,15 +111,16 @@ export default function HeaderMenuRight() {
             variant="text"
             className="text-tertiary hover:text-tertiary/80 p-0"
           >
-            <PiBellRingingBold className="w-6 h-6" />
+            {/* <PiBellRingingBold className="w-6 h-6" /> */}
+            <img src="/notification.svg" alt="notification" />
           </ActionIcon>
           <span className="absolute top-0.5 right-0.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-gray-900" />
         </div>
       </NotificationDropdown>
 
       {/* Settings */}
-
-      <FcSettings className="w-6 h-6 cursor-pointer text-white" color="#fff" />
+      <img src="/settings-icon.svg" alt="settings" />
+      {/* <FcSettings className="w-6 h-6 cursor-pointer text-white" color="#fff" /> */}
 
       {/* Profile Menu */}
       <ProfileMenu />

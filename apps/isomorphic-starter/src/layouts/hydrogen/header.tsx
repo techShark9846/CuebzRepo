@@ -77,29 +77,35 @@ function LogoWrapper() {
 
 export default function Header() {
   return (
-    <StickyHeader className="z-[990] bg-gradient-to-b from-[#2B2068] to-primary text-white h-[80px] flex items-center justify-between shadow-md border-b-4 border-tertiary px-2 sm:px-4">
-      <div className="flex items-center gap-4 sm:gap-8">
-        <div className="-ml-2 sm:-ml-4 pr-2">
-          <LogoWrapper />
-        </div>
+    <div className="relative">
+      <StickyHeader className="z-[990] bg-gradient-to-b from-[#2B2068] to-primary text-white h-[80px] flex items-center justify-between shadow-md border-b-4 px-2 sm:px-4">
+        <div className="flex items-center gap-4 sm:gap-8">
+          <div className="-ml-2 sm:-ml-4 pr-2">
+            <LogoWrapper />
+          </div>
 
-        <div className="hidden sm:block text-xs sm:text-sm">
-          <span className="font-medium text-white/70">Workspace</span>
-          <div className="font-semibold text-white leading-none truncate max-w-[120px] sm:max-w-none">
-            ABC Store Bangalore ▾
+          <div className="hidden sm:block text-xs sm:text-sm">
+            <span className="font-medium text-white/70">Workspace</span>
+            <div className="font-semibold text-white leading-none truncate max-w-[120px] sm:max-w-none">
+              ABC Store Bangalore ▾
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="h-16 w-px bg-black/50" />
+        <div className="h-16 w-px bg-black/50" />
 
-      <div className="flex-1 mx-2 sm:mx-4 max-w-[180px] sm:max-w-lg hidden md:block">
-        <SearchWidget className="w-full" placeholderClassName="text-white/60" />
-      </div>
+        <div className="flex-1 mx-2 sm:mx-4 max-w-[180px] sm:max-w-lg hidden md:block">
+          <SearchWidget
+            className="w-full"
+            placeholderClassName="text-white/60"
+          />
+        </div>
 
-      <div className="flex items-center gap-2 sm:gap-4">
-        <HeaderMenuRight />
-      </div>
-    </StickyHeader>
+        <div className="flex items-center gap-2 sm:gap-4">
+          <HeaderMenuRight />
+        </div>
+      </StickyHeader>
+      <div className="h-1 bg-tertiary relative -top-1 z-[1000]"></div>
+    </div>
   );
 }

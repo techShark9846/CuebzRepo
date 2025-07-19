@@ -11,6 +11,7 @@ import FilterDrawerView from "@core/components/controlled-table/table-filter";
 import ToggleColumns from "@core/components/table-utils/toggle-columns";
 import { DatePicker } from "@core/ui/datepicker";
 import customerService from "@/services/customerService";
+import FilterContainer from "../../filterContainer";
 
 interface IFilters {
   filters: any;
@@ -70,137 +71,139 @@ export default function InvoiceFilters({
   };
 
   return (
-    <Flex align="center" justify="between" className="mb-4">
-      {/* Global Search */}
-      <Input
-        type="search"
-        placeholder="Search by invoice number..."
-        value={filters.globalSearch}
-        onClear={() =>
-          setFilters((prev: any) => ({ ...prev, globalSearch: "" }))
-        }
-        onChange={(e) =>
-          setFilters((prev: any) => ({
-            ...prev,
-            globalSearch: e.target.value,
-          }))
-        }
-        inputClassName="h-9"
-        clearable={true}
-        prefix={<PiMagnifyingGlassBold className="size-4" />}
-      />
+    <FilterContainer>
+      <Flex align="center" justify="between">
+        {/* Global Search */}
+        <Input
+          type="search"
+          placeholder="Search by invoice number..."
+          value={filters.globalSearch}
+          onClear={() =>
+            setFilters((prev: any) => ({ ...prev, globalSearch: "" }))
+          }
+          onChange={(e) =>
+            setFilters((prev: any) => ({
+              ...prev,
+              globalSearch: e.target.value,
+            }))
+          }
+          inputClassName="h-9"
+          clearable={true}
+          prefix={<PiMagnifyingGlassBold className="size-4" />}
+        />
 
-      {/* Filters Drawer */}
-      <FilterDrawerView
-        isOpen={openDrawer}
-        drawerTitle="Invoice Filters"
-        setOpenDrawer={setOpenDrawer}
-        onApplyFilters={handleApplyFilters}
-      >
-        <div className="grid grid-cols-1 gap-6">
-          {/* Status Filter */}
-          <Select
-            label="Filter by Status"
-            placeholder="Select Invoice Status"
-            value={
-              localFilters.status
-                ? { value: localFilters.status, label: localFilters.status }
-                : null
-            }
-            options={[
-              { value: "Unpaid", label: "Unpaid" },
-              { value: "Paid", label: "Paid" },
-              { value: "Cancelled", label: "Cancelled" },
-              { value: "Refunded", label: "Refunded" },
-            ]}
-            onChange={(option: any) =>
-              setLocalFilters((prev: any) => ({
-                ...prev,
-                status: option?.value || "",
-              }))
-            }
-          />
+        {/* Filters Drawer */}
+        <FilterDrawerView
+          isOpen={openDrawer}
+          drawerTitle="Invoice Filters"
+          setOpenDrawer={setOpenDrawer}
+          onApplyFilters={handleApplyFilters}
+        >
+          <div className="grid grid-cols-1 gap-6">
+            {/* Status Filter */}
+            <Select
+              label="Filter by Status"
+              placeholder="Select Invoice Status"
+              value={
+                localFilters.status
+                  ? { value: localFilters.status, label: localFilters.status }
+                  : null
+              }
+              options={[
+                { value: "Unpaid", label: "Unpaid" },
+                { value: "Paid", label: "Paid" },
+                { value: "Cancelled", label: "Cancelled" },
+                { value: "Refunded", label: "Refunded" },
+              ]}
+              onChange={(option: any) =>
+                setLocalFilters((prev: any) => ({
+                  ...prev,
+                  status: option?.value || "",
+                }))
+              }
+            />
 
-          {/* Customer Filter */}
-          <Select
-            label="Filter by Customer"
-            placeholder="Select Customer"
-            options={customersOption}
-            searchable
-            value={
-              customersOption.find(
-                (option: any) => option.value === localFilters.customer_id
-              ) || null
-            }
-            onChange={(selected: any) =>
-              setLocalFilters((prev: any) => ({
-                ...prev,
-                customer_id: selected?.value || "",
-              }))
-            }
-          />
+            {/* Customer Filter */}
+            <Select
+              label="Filter by Customer"
+              placeholder="Select Customer"
+              options={customersOption}
+              searchable
+              value={
+                customersOption.find(
+                  (option: any) => option.value === localFilters.customer_id
+                ) || null
+              }
+              onChange={(selected: any) =>
+                setLocalFilters((prev: any) => ({
+                  ...prev,
+                  customer_id: selected?.value || "",
+                }))
+              }
+            />
 
-          {/* Date Range Filter */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Filter by Invoice Date (From - To)
-            </label>
-            <div className="flex space-x-2">
-              <DatePicker
-                selected={
-                  localFilters.date_from
-                    ? new Date(localFilters.date_from)
-                    : null
-                }
-                onChange={(date: Date | null) => {
-                  setLocalFilters((prev: any) => ({
-                    ...prev,
-                    date_from: date ? date.toISOString().split("T")[0] : null,
-                  }));
-                }}
-                placeholderText="Start Date"
-                dateFormat="dd-MMM-yyyy"
-                className="w-full border-gray-300 rounded-md shadow-sm"
-              />
-              <DatePicker
-                selected={
-                  localFilters.date_to ? new Date(localFilters.date_to) : null
-                }
-                onChange={(date: Date | null) => {
-                  setLocalFilters((prev: any) => ({
-                    ...prev,
-                    date_to: date ? date.toISOString().split("T")[0] : null,
-                  }));
-                }}
-                placeholderText="End Date"
-                dateFormat="dd-MMM-yyyy"
-                className="w-full border-gray-300 rounded-md shadow-sm"
-              />
+            {/* Date Range Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Filter by Invoice Date (From - To)
+              </label>
+              <div className="flex space-x-2">
+                <DatePicker
+                  selected={
+                    localFilters.date_from
+                      ? new Date(localFilters.date_from)
+                      : null
+                  }
+                  onChange={(date: Date | null) => {
+                    setLocalFilters((prev: any) => ({
+                      ...prev,
+                      date_from: date ? date.toISOString().split("T")[0] : null,
+                    }));
+                  }}
+                  placeholderText="Start Date"
+                  dateFormat="dd-MMM-yyyy"
+                  className="w-full border-gray-300 rounded-md shadow-sm"
+                />
+                <DatePicker
+                  selected={
+                    localFilters.date_to ? new Date(localFilters.date_to) : null
+                  }
+                  onChange={(date: Date | null) => {
+                    setLocalFilters((prev: any) => ({
+                      ...prev,
+                      date_to: date ? date.toISOString().split("T")[0] : null,
+                    }));
+                  }}
+                  placeholderText="End Date"
+                  dateFormat="dd-MMM-yyyy"
+                  className="w-full border-gray-300 rounded-md shadow-sm"
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </FilterDrawerView>
+        </FilterDrawerView>
 
-      {/* Action Buttons */}
-      <Flex align="center" gap="3" className="w-auto">
-        <Button
-          size="sm"
-          onClick={handleClearFilters}
-          variant="flat"
-          className="h-9 bg-gray-200/70"
-        >
-          <PiTrashDuotone className="me-1.5 h-[17px] w-[17px]" /> Clear
-        </Button>
-        <Button
-          variant="outline"
-          onClick={() => setOpenDrawer(!openDrawer)}
-          className="h-9 pe-3 ps-2.5"
-        >
-          <PiFunnel className="me-1.5 size-[18px]" strokeWidth={1.7} />
-          Filters
-        </Button>
-        <ToggleColumns table={table} />
+        {/* Action Buttons */}
+        <Flex align="center" gap="3" className="w-auto">
+          <Button
+            size="sm"
+            onClick={handleClearFilters}
+            variant="flat"
+            className="h-9 bg-gray-200/70"
+          >
+            <PiTrashDuotone className="me-1.5 h-[17px] w-[17px]" /> Clear
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => setOpenDrawer(!openDrawer)}
+            className="h-9 pe-3 ps-2.5"
+          >
+            <PiFunnel className="me-1.5 size-[18px]" strokeWidth={1.7} />
+            Filters
+          </Button>
+          <ToggleColumns table={table} />
+        </Flex>
       </Flex>
-    </Flex>
+    </FilterContainer>
   );
 }

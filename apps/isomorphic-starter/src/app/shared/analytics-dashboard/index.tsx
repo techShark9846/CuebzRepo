@@ -73,22 +73,23 @@ export default function AnalyticsDashboard() {
         data={analyticsData.topSection}
         // className="@container col-span-full"
       />
+      <div className="p-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 3xl:gap-8 mt-4">
+          <LeadConversionChart data={analyticsData.topSection.leads} />
+          <InvoiceStatusChart data={analyticsData.topSection.invoices} />
+          <WeeklyCashFlowChart
+            data={analyticsData.bottomSection.financeTracker.weeklyFlow}
+          />
+        </div>
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mt-5">
+          <RecentTransactionsTable
+            data={analyticsData.bottomSection.financeTracker.recentTransactions}
+          />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 3xl:gap-8 mt-4">
-        <LeadConversionChart data={analyticsData.topSection.leads} />
-        <InvoiceStatusChart data={analyticsData.topSection.invoices} />
-        <WeeklyCashFlowChart
-          data={analyticsData.bottomSection.financeTracker.weeklyFlow}
-        />
-      </div>
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mt-5">
-        <RecentTransactionsTable
-          data={analyticsData.bottomSection.financeTracker.recentTransactions}
-        />
-
-        <ActiveLeadsTable
-          data={analyticsData.bottomSection.salesHub.activeLeads}
-        />
+          <ActiveLeadsTable
+            data={analyticsData.bottomSection.salesHub.activeLeads}
+          />
+        </div>
       </div>
 
       {/* <ExpandableSection title="Finance Tracker"> */}

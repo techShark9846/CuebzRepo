@@ -213,7 +213,11 @@ export default function TablePagination<TData>({
   const totalPages = Math.ceil(totalCount / pageSize);
 
   return (
-    <Flex justify="between" align="center" className="px-4 py-3 text-sm">
+    <Flex
+      justify="between"
+      align="center"
+      className="px-4 py-3 text-sm bg-white rounded-b-[4px]"
+    >
       {/* Left: Rows per page */}
       <Flex align="center" className="gap-2 text-gray-700">
         <Text className="text-sm">Rows per page</Text>
@@ -229,7 +233,7 @@ export default function TablePagination<TData>({
       </Flex>
 
       {/* Right: Pagination */}
-      <Flex align="center" className="gap-2 text-gray-700">
+      <Flex align="center" className="gap-2 text-gray-700 justify-end">
         <ActionIcon
           size="sm"
           variant="outline"
