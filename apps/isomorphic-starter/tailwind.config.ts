@@ -14,6 +14,7 @@
 
 import type { Config } from "tailwindcss";
 import sharedConfig from "tailwind-config";
+import Sidebar from "@/layouts/hydrogen/sidebar";
 
 const config: Config = {
   content: [
@@ -33,6 +34,9 @@ const config: Config = {
         },
         tertiary: {
           DEFAULT: "#EFCC27",
+        },
+        sidebar : {
+          DEFAULT : "#101820",
         },
       },
     },

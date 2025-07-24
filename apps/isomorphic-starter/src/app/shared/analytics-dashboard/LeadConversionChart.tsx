@@ -234,11 +234,15 @@ export default function LeadConversionChart({
   };
   className?: string;
 }) {
+
   const chartData = [
     { name: "Won", value: data.won },
     { name: "Contacted", value: data.contacted },
     { name: "New", value: data.new },
   ];
+
+
+
 
   const hasData = chartData.some((item) => item.value > 0);
 

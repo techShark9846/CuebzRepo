@@ -67,18 +67,49 @@ export default function AnalyticsDashboard() {
         <Loader size="lg" color="primary" />
       </div>
     );
+
+  const sampleLeadConversionData = {
+    new: 20,
+    contacted: 30,
+    won: 60,
+    total: 110, // Sum of all above
+    conversionRate: (60 / 110) * 100, // 54.55
+  };
+
+  const invoiceData = {
+    Paid: 120,
+    Unpaid: 45,
+    Cancelled: 15,
+    Refunded: 20,
+  };
+
+  const weeklyCashFlowData = [
+    { _id: "2025-06-23", totalAdd: 1500, totalExpense: 800 },
+    { _id: "2025-06-30", totalAdd: 1000, totalExpense: 1200 },
+    { _id: "2025-07-07", totalAdd: 1800, totalExpense: 900 },
+    { _id: "2025-07-14", totalAdd: 1300, totalExpense: 1500 },
+    { _id: "2025-07-21", totalAdd: 2000, totalExpense: 1700 },
+  ];
+
+
+
   return (
     <div className="@container">
       <StatCards
         data={analyticsData.topSection}
-        // className="@container col-span-full"
+      // className="@container col-span-full"
       />
       <div className="p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 3xl:gap-8 mt-4">
-          <LeadConversionChart data={analyticsData.topSection.leads} />
-          <InvoiceStatusChart data={analyticsData.topSection.invoices} />
-          <WeeklyCashFlowChart
+          {/* <LeadConversionChart data={analyticsData.topSection.leads} /> */}
+          <LeadConversionChart data={sampleLeadConversionData} />
+          {/* <InvoiceStatusChart data={analyticsData.topSection.invoices} /> */}
+          <InvoiceStatusChart data={invoiceData} />
+          {/* <WeeklyCashFlowChart
             data={analyticsData.bottomSection.financeTracker.weeklyFlow}
+          /> */}
+          <WeeklyCashFlowChart
+            data={weeklyCashFlowData}
           />
         </div>
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mt-5">

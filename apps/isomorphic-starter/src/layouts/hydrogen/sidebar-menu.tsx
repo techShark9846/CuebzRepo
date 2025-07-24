@@ -748,7 +748,9 @@ export function SidebarMenu({
                             <span className="text-lg">{item.icon}</span>
                           )}
                           {!isCollapsed && (
-                            <span className="ms-2">{item.name}</span>
+                            <span className={`ms-2 text-sidebar ${item?.name === "Reception" ? "font-semibold" : "font-normal"}`}>
+                              {item.name}
+                            </span>
                           )}
                         </span>
                         {!isCollapsed && (
@@ -771,9 +773,9 @@ export function SidebarMenu({
                             href={dropdownItem.href}
                             title={isCollapsed ? dropdownItem.name : ""}
                             className={cn(
-                              "ml-6 mt-1 block rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150",
+                              "ml-6 mt-1 block rounded-md px-3 py-1.5 text-xs font-medium transition-colors duration-150",
                               isChildActive
-                                ? "text-primary"
+                                ? "text-primary font-bold"
                                 : "text-gray-600 hover:text-gray-900"
                             )}
                           >
@@ -804,7 +806,15 @@ export function SidebarMenu({
                         <span className="text-lg">{item.icon}</span>
                       )}
                       {!isCollapsed && (
-                        <span className="ms-2">{item.name}</span>
+                        <span
+                          className={`ms-2 text-sidebar ${item?.name === "Analytics"
+                            ? "font-semibold"
+                            : "font-normal"
+                            }`}
+                        >
+                          {" "}
+                          {item.name}
+                        </span>
                       )}
                     </span>
                   </Link>
@@ -815,7 +825,7 @@ export function SidebarMenu({
                 <Title
                   as="h6"
                   className={cn(
-                    "mt-6 mb-2 px-3 text-xs font-semibold uppercase text-gray-500 tracking-wide"
+                    "mt-6 mb-2 px-3 text-xs uppercase text-gray-500 tracking-wide"
                   )}
                 >
                   {item.name}
